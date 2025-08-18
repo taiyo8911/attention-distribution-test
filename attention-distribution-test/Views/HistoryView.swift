@@ -199,4 +199,5 @@ struct StatisticCard: View {
 
 #Preview {
     HistoryView()
+        .environmentObject(TestManager())
 }
