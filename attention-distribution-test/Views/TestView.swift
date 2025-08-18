@@ -13,16 +13,16 @@ struct TestView: View {
     @State private var showingStopConfirmation = false
     @State private var showResultView = false
     @Environment(\.dismiss) var dismiss
-    
+
     var body: some View {
         GeometryReader { geometry in
             VStack(spacing: 0) {
                 // ヘッダー部分
                 headerSection
-                
+
                 // メインコンテンツ
                 mainContentSection(geometry: geometry)
-                
+
                 // フッター部分
                 footerSection
             }
@@ -45,7 +45,7 @@ struct TestView: View {
             Button("NO", role: .cancel) { }
         }
     }
-    
+
     // MARK: - Header Section
     private var headerSection: some View {
         VStack(spacing: 12) {
@@ -54,7 +54,7 @@ struct TestView: View {
                 .font(.title)
                 .fontWeight(.bold)
                 .monospacedDigit()
-            
+
             // 中断ボタン
             Button(action: {
                 showingStopConfirmation = true
@@ -67,12 +67,12 @@ struct TestView: View {
                     .background(Color.red.opacity(0.1))
                     .cornerRadius(8)
             }
-            
+
             // 次に押す数字
             Text("次に押す: \(testManager.currentNumber)")
                 .font(.headline)
                 .fontWeight(.semibold)
-            
+
             // エラーメッセージ
             if testManager.showError {
                 VStack(alignment: .leading, spacing: 2) {
@@ -90,16 +90,16 @@ struct TestView: View {
         .padding(.vertical, 12)
         .background(Color(.systemBackground))
     }
-    
+
     // MARK: - Main Content Section
     private func mainContentSection(geometry: GeometryProxy) -> some View {
         let availableHeight = geometry.size.height - 160 // ヘッダーとフッターを除く
         let gridSize = min(geometry.size.width - 32, availableHeight)
         let cellSize = gridSize / 7
-        
+
         return VStack {
             Spacer()
-            
+
             // 7x7 グリッド
             VStack(spacing: 1) {
                 ForEach(0..<7, id: \.self) { row in
@@ -118,11 +118,11 @@ struct TestView: View {
             }
             .background(Color.black)
             .cornerRadius(2)
-            
+
             Spacer()
         }
     }
-    
+
     // MARK: - Footer Section
     private var footerSection: some View {
         VStack {
@@ -151,7 +151,7 @@ struct GridCell: View {
     let isSelected: Bool
     let cellSize: CGFloat
     let action: () -> Void
-    
+
     var body: some View {
         Button(action: action) {
             Text("\(number)")
@@ -166,11 +166,11 @@ struct GridCell: View {
         }
         .buttonStyle(PlainButtonStyle())
     }
-    
+
     private var fontSize: CGFloat {
         cellSize * 0.5
     }
-    
+
     private var backgroundColor: Color {
         if isSelected {
             return Color.yellow.opacity(0.7)
@@ -181,5 +181,9 @@ struct GridCell: View {
 }
 
 #Preview {
-    TestView()
+    let testManager = TestManager()
+    testManager.startTest() // プレビュー用にテストを開始状態にする
+
+    return TestView()
+        .environmentObject(testManager)
 }
