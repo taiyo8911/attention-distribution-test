@@ -13,7 +13,7 @@ struct HistoryView: View {
 
     var body: some View {
         NavigationView {
-            VStack(spacing: 0) {
+            VStack {
                 if historyViewModel.testResults.isEmpty {
                     emptyStateView
                 } else {
@@ -37,73 +37,52 @@ struct HistoryView: View {
         }
     }
 
-    // MARK: - Empty State View
     private var emptyStateView: some View {
         VStack(spacing: 24) {
             Spacer()
 
             Image(systemName: "clock.badge.questionmark")
                 .font(.system(size: 64))
-                .foregroundColor(.gray.opacity(0.6))
+                .foregroundColor(.gray)
 
-            VStack(spacing: 8) {
-                Text("履歴はありません")
-                    .font(.title2)
-                    .fontWeight(.semibold)
-                    .foregroundColor(.primary)
-            }
+            Text("履歴はありません")
+                .font(.title2)
+                .fontWeight(.semibold)
+                .foregroundColor(.primary)
 
             Spacer()
         }
-        .padding(.horizontal, 40)
     }
 
-    // MARK: - History List
     private var historyList: some View {
         List {
             ForEach(historyViewModel.testResults) { result in
-                HistoryRow(result: result)
+                HStack {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(result.formattedDate)
+                            .font(.callout)
+
+                        Text(result.deviceType.displayName)
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+
+                    Spacer()
+
+                    Text(result.formattedTime)
+                        .font(.callout)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.blue)
+                        .monospacedDigit()
+                }
+                .padding(.vertical, 8)
             }
         }
         .listStyle(PlainListStyle())
     }
 }
 
-// MARK: - History Row Component
-struct HistoryRow: View {
-    let result: TestResult
-
-    private let dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy/MM/dd HH:mm"
-        return formatter
-    }()
-
-    var body: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 4) {
-                Text(dateFormatter.string(from: result.date))
-                    .font(.callout)
-                    .foregroundColor(.primary)
-
-                Text(result.deviceType.displayName)
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
-
-            Spacer()
-
-            Text(result.formattedTime)
-                .font(.callout)
-                .fontWeight(.semibold)
-                .foregroundColor(.blue)
-                .monospacedDigit()
-        }
-        .padding(.vertical, 8)
-    }
-}
-
 #Preview {
     HistoryView()
-        .environmentObject(HistoryViewModel())
+        .environmentObject(HistoryViewModel(dataService: MockDataService(withMockData: true)))
 }

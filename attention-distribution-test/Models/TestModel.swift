@@ -5,7 +5,6 @@
 //  Created by Taiyo KOSHIBA on 2025/08/18.
 //
 
-
 import Foundation
 
 // MARK: - Test Model
@@ -64,7 +63,8 @@ struct TestModel {
 
     // MARK: - Initializer
     init() {
-        reset()
+        // 初期化時は空の配列のまま（generateGrid()でのみ数字を配置）
+        gridNumbers = []
     }
 }
 
@@ -143,7 +143,7 @@ extension TestModel {
         pauseStartTime = nil
         totalPauseTime = 0
         tapHistory.removeAll()
-        gridNumbers = []
+        gridNumbers = [] // リセット時は空配列に戻す
     }
 }
 
@@ -165,23 +165,34 @@ extension TestModel {
         for row in 0..<gridSize {
             for col in 0..<gridSize {
                 if row != centerPos || col != centerPos { // 中央以外
-                    gridNumbers[row][col] = numbers[index]
-                    index += 1
+                    if index < numbers.count {
+                        gridNumbers[row][col] = numbers[index]
+                        index += 1
+                    }
                 }
             }
         }
     }
 
     func getNumber(at position: GridPosition) -> Int? {
-        guard position.isValid(for: gridSize) else { return nil }
+        guard position.isValid(for: gridSize),
+              !gridNumbers.isEmpty,
+              position.row < gridNumbers.count,
+              position.col < gridNumbers[position.row].count else {
+            return nil
+        }
         return gridNumbers[position.row][position.col]
     }
 
     func findPosition(of number: Int) -> GridPosition? {
+        guard !gridNumbers.isEmpty else { return nil }
+
         for row in 0..<gridSize {
             for col in 0..<gridSize {
-                if gridNumbers[row][col] == number {
-                    return GridPosition(row: row, col: col)
+                if row < gridNumbers.count && col < gridNumbers[row].count {
+                    if gridNumbers[row][col] == number {
+                        return GridPosition(row: row, col: col)
+                    }
                 }
             }
         }
@@ -194,6 +205,11 @@ extension TestModel {
     mutating func tapNumber(at position: GridPosition) -> Bool {
         guard gameState.shouldAcceptInput else { return false }
         guard position.isValid(for: gridSize) else { return false }
+        guard !gridNumbers.isEmpty,
+              position.row < gridNumbers.count,
+              position.col < gridNumbers[position.row].count else {
+            return false
+        }
 
         let tappedNumber = gridNumbers[position.row][position.col]
         lastTappedPosition = position

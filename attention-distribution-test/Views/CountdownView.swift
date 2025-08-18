@@ -21,15 +21,9 @@ struct CountdownView: View {
                 TestView()
                     .environmentObject(testViewModel)
             } else {
-                VStack {
-                    Spacer()
-
-                    Text("\(countdownNumber)")
-                        .font(.system(size: 120, weight: .bold, design: .rounded))
-                        .foregroundColor(.white)
-
-                    Spacer()
-                }
+                Text("\(countdownNumber)")
+                    .font(.system(size: 120, weight: .bold))
+                    .foregroundColor(.white)
             }
         }
         .onAppear {
@@ -46,12 +40,9 @@ struct CountdownView: View {
             } else if countdownNumber == 1 {
                 countdownNumber = 0
 
-                // 少し待ってからテスト開始
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     testViewModel.completeCountdown()
-                    withAnimation(.easeInOut(duration: 0.3)) {
-                        showTestView = true
-                    }
+                    showTestView = true
                     timer.invalidate()
                 }
             }
