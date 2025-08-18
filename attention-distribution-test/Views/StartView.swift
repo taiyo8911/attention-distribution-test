@@ -88,4 +88,5 @@ struct StartView: View {
 
 #Preview {
     StartView()
+        .environmentObject(TestManager())
 }
