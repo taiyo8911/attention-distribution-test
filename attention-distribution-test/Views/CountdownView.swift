@@ -62,4 +62,5 @@ struct CountdownView: View {
 
 #Preview {
     CountdownView()
+        .environmentObject(TestManager())
 }
