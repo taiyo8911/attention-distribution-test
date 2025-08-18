@@ -439,9 +439,6 @@ struct SettingsView: View {
 
 #Preview {
     StartView()
-        .environmentObject(TestViewModel(
-            timerService: MockTimerService(),
-            dataService: MockDataService()
-        ))
-        .environmentObject(MockHistoryViewModel())
+        .environmentObject(TestViewModel())
+        .environmentObject(HistoryViewModel())
 }
