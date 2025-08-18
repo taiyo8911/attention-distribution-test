@@ -22,7 +22,7 @@ class HistoryViewModel: ObservableObject {
     @Published var showingClearConfirmation = false
 
     // MARK: - Dependencies
-    private let dataService: DataServiceProtocol
+    let dataService: DataServiceProtocol // Made public for ResultView access
 
     // MARK: - Private Properties
     private var cancellables = Set<AnyCancellable>()

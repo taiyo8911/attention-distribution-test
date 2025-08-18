@@ -16,7 +16,7 @@ struct TimerView: View {
 
     // Optional styling properties
     var style: TimerStyle = .normal
-    var showMilliseconds: Bool = true
+    var showMilliseconds: Bool = false // Changed default to false
     var animateChanges: Bool = true
 
     // MARK: - State
@@ -46,7 +46,6 @@ struct TimerView: View {
                 ))
                 .foregroundColor(textColor)
                 .monospacedDigit()
-            .monospacedDigit()
         }
         .padding(style.padding)
         .background(backgroundColor)
@@ -89,7 +88,11 @@ struct TimerView: View {
 
     // MARK: - Computed Properties
     private var formattedTime: String {
-        return elapsedTime.formattedTime
+        if showMilliseconds {
+            return elapsedTime.detailedFormattedTime
+        } else {
+            return elapsedTime.formattedTime
+        }
     }
 
     private var iconName: String {

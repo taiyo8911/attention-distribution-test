@@ -61,11 +61,12 @@ struct TestView: View {
                 stopButton
             }
 
-            // Timer display
+            // Timer display (MM:SS format)
             TimerView(
                 elapsedTime: testViewModel.elapsedTime,
                 gameState: testViewModel.gameState,
-                style: .prominent
+                style: .prominent,
+                showMilliseconds: false // Changed to false for MM:SS format
             )
 
             // Current target display
@@ -110,7 +111,6 @@ struct TestView: View {
                 Text("中断")
             }
             .font(.callout)
-//            .fontWeight(.medium)
             .foregroundColor(.red)
             .padding(.horizontal, 12)
             .padding(.vertical, 8)
@@ -238,7 +238,6 @@ struct TestView: View {
                     Text(confirmButtonTitle)
                 }
                 .font(.title3)
-//                .fontWeight(.semibold)
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 16)
@@ -302,7 +301,7 @@ struct TestView: View {
 
             Spacer()
 
-            // Estimated completion time
+            // Estimated completion time (MM:SS format)
             VStack(spacing: 2) {
                 Text("予想完了")
                     .font(.caption)
@@ -340,7 +339,8 @@ struct TestView: View {
         let estimatedRemainingTime = averageTimePerNumber * Double(remainingNumbers)
         let estimatedTotalTime = testViewModel.elapsedTime + estimatedRemainingTime
 
-        return estimatedTotalTime.shortFormattedTime
+        // Use MM:SS format instead of shortFormattedTime
+        return estimatedTotalTime.formattedTime
     }
 }
 

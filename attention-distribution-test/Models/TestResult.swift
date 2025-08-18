@@ -179,13 +179,20 @@ extension TimeInterval {
     var formattedTime: String {
         let minutes = Int(self) / 60
         let seconds = Int(self) % 60
-        let milliseconds = Int((self.truncatingRemainder(dividingBy: 1)) * 100)
-        return String(format: "%02d:%02d:%02d", minutes, seconds, milliseconds)
+        return String(format: "%02d:%02d", minutes, seconds)
     }
 
     var shortFormattedTime: String {
         let minutes = Int(self) / 60
         let seconds = Int(self) % 60
         return String(format: "%02d:%02d", minutes, seconds)
+    }
+
+    // Legacy method for backward compatibility (with milliseconds)
+    var detailedFormattedTime: String {
+        let minutes = Int(self) / 60
+        let seconds = Int(self) % 60
+        let milliseconds = Int((self.truncatingRemainder(dividingBy: 1)) * 100)
+        return String(format: "%02d:%02d:%02d", minutes, seconds, milliseconds)
     }
 }
