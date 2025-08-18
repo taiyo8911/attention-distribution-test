@@ -18,13 +18,13 @@ struct ResultView: View {
             
             // 完了メッセージ
             VStack(spacing: 20) {
-                Text("検査完了")
+                Text("検査終了")
                     .font(.largeTitle)
                     .fontWeight(.bold)
                 
                 // 完了時間表示
                 VStack(spacing: 8) {
-                    Text("完了時間")
+                    Text("検査時間")
                         .font(.headline)
                         .foregroundColor(.secondary)
                     
