@@ -5,6 +5,7 @@
 //  Created by Taiyo KOSHIBA on 2025/08/18.
 //
 
+
 import Foundation
 
 // MARK: - Game State Enumeration
@@ -111,14 +112,5 @@ enum GameState: String, CaseIterable {
         case .cancelled:
             return "検査が中断されました"
         }
-    }
-}
-
-// MARK: - GameState Extensions
-extension GameState: Codable {}
-
-extension GameState: CustomStringConvertible {
-    var description: String {
-        return displayName
     }
 }
