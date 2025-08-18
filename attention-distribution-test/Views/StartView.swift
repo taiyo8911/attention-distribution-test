@@ -44,8 +44,6 @@ struct StartView: View {
             Button("NO", role: .cancel) {
                 showingConfirmation = false
             }
-        } message: {
-            Text("0から48まで順番に数字をタップする検査です。\n集中して取り組んでください。")
         }
         .sheet(isPresented: $showingHistory) {
             HistoryView()
@@ -119,19 +117,19 @@ struct StartView: View {
             VStack(alignment: .leading, spacing: 8) {
                 InstructionRow(
                     icon: "grid.circle",
-                    text: "7×7のグリッドに0〜48の数字が配置されます"
+                    text: "7×7のマスに0〜48の数字が配置されます"
                 )
                 InstructionRow(
                     icon: "hand.tap",
                     text: "0から順番に48まで数字をタップしてください"
                 )
                 InstructionRow(
-                    icon: "timer",
-                    text: "完了までの時間を計測します"
+                    icon: "checkmark.circle",
+                    text: "数字をタップしたら確認ボタンを押してください"
                 )
                 InstructionRow(
-                    icon: "target",
-                    text: "正確性と速さの両方が重要です"
+                    icon: "timer",
+                    text: "完了までの時間を計測します"
                 )
             }
         }
@@ -155,7 +153,7 @@ struct StartView: View {
                     .fontWeight(.semibold)
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
-                    .padding(.vertical, 16)
+                    .padding(.vertical, 14)
                     .background(.blue)
                     .cornerRadius(12)
             }
@@ -164,16 +162,13 @@ struct StartView: View {
             Button(action: {
                 showingHistory = true
             }) {
-                HStack {
-                    Image(systemName: "clock.arrow.circlepath")
-                    Text("履歴確認")
-                }
-                .font(.callout)
-                .foregroundColor(.blue)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 12)
-                .background(Color.blue.opacity(0.1))
-                .cornerRadius(10)
+                Text("履歴確認")
+                    .font(.title2)
+                    .foregroundColor(.blue)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 14)
+                    .background(Color.blue.opacity(0.1))
+                    .cornerRadius(12)
             }
         }
         .padding(.horizontal, 24)
