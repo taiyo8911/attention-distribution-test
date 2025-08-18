@@ -38,249 +38,120 @@ struct TestModel {
         return currentNumber > targetNumber
     }
 
-    var progress: Double {
-        return Double(currentNumber) / Double(targetNumber + 1)
-    }
-
-    var elapsedTime: TimeInterval {
-        guard let startTime = startTime else { return 0 }
-
-        let endPoint = endTime ?? Date()
-        let totalTime = endPoint.timeIntervalSince(startTime)
-
-        // 一時停止時間を除く
-        var pauseTime = totalPauseTime
-        if gameState == .paused, let pauseStart = pauseStartTime {
-            pauseTime += Date().timeIntervalSince(pauseStart)
-        }
-
-        return max(0, totalTime - pauseTime)
-    }
-
     var canConfirm: Bool {
         return selectedPosition != nil && !showError
     }
 
     // MARK: - Initializer
     init() {
-        // 初期化時は空の配列のまま（generateGrid()でのみ数字を配置）
+        // 初期化時は空配列
         gridNumbers = []
     }
-}
 
-// MARK: - Game State Management
-extension TestModel {
-    mutating func updateGameState(_ newState: GameState) {
-        guard gameState.canTransition(to: newState) else {
-            print("Invalid state transition from \(gameState) to \(newState)")
-            return
-        }
+    // MARK: - Grid Management
+    mutating func generateGrid() {
+        // 7x7グリッドを初期化
+        gridNumbers = Array(repeating: Array(repeating: 0, count: gridSize), count: gridSize)
 
-        let oldState = gameState
-        gameState = newState
+        // 中央(3,3)に0を配置
+        gridNumbers[3][3] = 0
 
-        // State-specific actions
-        switch newState {
-        case .inProgress:
-            if oldState == .countdown {
-                startTest()
-            } else if oldState == .paused {
-                resumeTest()
+        // 1から48までの数字をシャッフル
+        var numbers = Array(1...48)
+        numbers.shuffle()
+
+        // 中央以外の位置に数字を配置
+        var index = 0
+        for row in 0..<7 {
+            for col in 0..<7 {
+                if row != 3 || col != 3 { // 中央以外
+                    gridNumbers[row][col] = numbers[index]
+                    index += 1
+                }
             }
-        case .paused:
-            pauseTest()
-        case .completed:
-            completeTest()
-        case .cancelled:
-            cancelTest()
-        case .notStarted:
-            reset()
-        default:
-            break
         }
     }
 
-    private mutating func startTest() {
+    func getNumber(at row: Int, col: Int) -> Int {
+        guard row >= 0, row < 7, col >= 0, col < 7,
+              !gridNumbers.isEmpty,
+              row < gridNumbers.count,
+              col < gridNumbers[row].count else {
+            return -1
+        }
+        return gridNumbers[row][col]
+    }
+
+    // MARK: - Game State Management
+    mutating func startTest() {
+        gameState = .inProgress
         startTime = Date()
         generateGrid()
-        clearError()
+        currentNumber = 0
+        selectedPosition = nil
+        showError = false
         tapHistory.removeAll()
-        totalPauseTime = 0
     }
 
-    private mutating func pauseTest() {
-        pauseStartTime = Date()
-    }
-
-    private mutating func resumeTest() {
-        if let pauseStart = pauseStartTime {
-            totalPauseTime += Date().timeIntervalSince(pauseStart)
-            pauseStartTime = nil
-        }
-    }
-
-    private mutating func completeTest() {
-        endTime = Date()
-        if let pauseStart = pauseStartTime {
-            totalPauseTime += Date().timeIntervalSince(pauseStart)
-            pauseStartTime = nil
-        }
-    }
-
-    private mutating func cancelTest() {
-        endTime = Date()
-    }
-
-    mutating func reset() {
+    mutating func resetTest() {
         gameState = .notStarted
         currentNumber = 0
         selectedPosition = nil
-        lastTappedPosition = nil
         showError = false
-        errorMessage = ""
         startTime = nil
         endTime = nil
-        pauseStartTime = nil
-        totalPauseTime = 0
+        gridNumbers = []
         tapHistory.removeAll()
-        gridNumbers = [] // リセット時は空配列に戻す
-    }
-}
-
-// MARK: - Grid Management
-extension TestModel {
-    mutating func generateGrid() {
-        // 7x7グリッドを初期化
-        gridNumbers = Array(repeating: Array(repeating: -1, count: gridSize), count: gridSize)
-
-        // 中央に0を配置
-        let centerPos = gridSize / 2
-        gridNumbers[centerPos][centerPos] = 0
-
-        // 1からtargetNumberまでの数字をランダムに配置
-        var numbers = Array(1...targetNumber)
-        numbers.shuffle()
-
-        var index = 0
-        for row in 0..<gridSize {
-            for col in 0..<gridSize {
-                if row != centerPos || col != centerPos { // 中央以外
-                    if index < numbers.count {
-                        gridNumbers[row][col] = numbers[index]
-                        index += 1
-                    }
-                }
-            }
-        }
     }
 
-    func getNumber(at position: GridPosition) -> Int? {
-        guard position.isValid(for: gridSize),
-              !gridNumbers.isEmpty,
-              position.row < gridNumbers.count,
-              position.col < gridNumbers[position.row].count else {
-            return nil
-        }
-        return gridNumbers[position.row][position.col]
+    mutating func completeTest() {
+        gameState = .completed
+        endTime = Date()
     }
 
-    func findPosition(of number: Int) -> GridPosition? {
-        guard !gridNumbers.isEmpty else { return nil }
+    // MARK: - User Interaction
+    mutating func tapNumber(at row: Int, col: Int) -> Bool {
+        guard gameState == .inProgress else { return false }
 
-        for row in 0..<gridSize {
-            for col in 0..<gridSize {
-                if row < gridNumbers.count && col < gridNumbers[row].count {
-                    if gridNumbers[row][col] == number {
-                        return GridPosition(row: row, col: col)
-                    }
-                }
-            }
-        }
-        return nil
-    }
-}
-
-// MARK: - User Interaction
-extension TestModel {
-    mutating func tapNumber(at position: GridPosition) -> Bool {
-        guard gameState.shouldAcceptInput else { return false }
-        guard position.isValid(for: gridSize) else { return false }
-        guard !gridNumbers.isEmpty,
-              position.row < gridNumbers.count,
-              position.col < gridNumbers[position.row].count else {
-            return false
-        }
-
-        let tappedNumber = gridNumbers[position.row][position.col]
-        lastTappedPosition = position
-
-        // タップ履歴を記録
-        let tapRecord = TapRecord(
-            number: tappedNumber,
-            position: position,
-            timestamp: Date(),
-            isCorrect: tappedNumber == currentNumber
-        )
-        tapHistory.append(tapRecord)
+        let tappedNumber = getNumber(at: row, col: col)
 
         if tappedNumber == currentNumber {
             // 正解
-            selectedPosition = position
-            clearError()
+            selectedPosition = GridPosition(row: row, col: col)
+            showError = false
             return true
         } else {
             // 不正解
             selectedPosition = nil
-            showError(message: "⚠️ 間違いです。正しい数字をタップしてください。")
+            showError = true
             return false
         }
     }
 
     mutating func confirmSelection() -> Bool {
         guard canConfirm else { return false }
-        guard selectedPosition != nil else { return false }
 
         currentNumber += 1
         selectedPosition = nil
-        clearError()
+        showError = false
 
         if currentNumber > targetNumber {
-            updateGameState(.completed)
+            completeTest()
+            return true
         }
-
-        return true
-    }
-
-    private mutating func showError(message: String) {
-        showError = true
-        errorMessage = message
-    }
-
-    private mutating func clearError() {
-        showError = false
-        errorMessage = ""
+        return false
     }
 }
 
 // MARK: - Supporting Types
-struct GridPosition: Equatable, Codable {
+struct GridPosition: Equatable {
     let row: Int
     let col: Int
-
-    func isValid(for gridSize: Int) -> Bool {
-        return row >= 0 && row < gridSize && col >= 0 && col < gridSize
-    }
 }
 
-struct TapRecord: Codable {
+struct TapRecord {
     let number: Int
     let position: GridPosition
     let timestamp: Date
     let isCorrect: Bool
-
-    var elapsedTime: TimeInterval {
-        // This would be calculated relative to test start time
-        // Implementation depends on context
-        return 0
-    }
 }

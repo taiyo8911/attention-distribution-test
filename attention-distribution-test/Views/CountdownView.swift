@@ -32,18 +32,14 @@ struct CountdownView: View {
     }
 
     private func startCountdown() {
-        testViewModel.startCountdown()
-
         Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
             if countdownNumber > 1 {
                 countdownNumber -= 1
-            } else if countdownNumber == 1 {
-                countdownNumber = 0
+            } else {
+                timer.invalidate()
 
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    testViewModel.completeCountdown()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     showTestView = true
-                    timer.invalidate()
                 }
             }
         }
