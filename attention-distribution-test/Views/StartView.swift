@@ -29,19 +29,17 @@ struct StartView: View {
                 buttonSection
 
                 Spacer()
-
-                if historyViewModel.hasResults {
-                    quickStatsSection
-                }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(backgroundGradient)
+            .background(Color(.systemBackground))
         }
         .navigationTitle("")
         .navigationBarHidden(true)
         .alert("検査を開始しますか？", isPresented: $showingConfirmation) {
             Button("YES") {
-                startTest()
+                testViewModel.startCountdown()
+                showingCountdown = true
+
             }
             Button("NO", role: .cancel) {
                 showingConfirmation = false
@@ -103,11 +101,6 @@ struct StartView: View {
         VStack(spacing: 24) {
             // Instructions card
             instructionCard
-
-            // Game state info
-            if testViewModel.gameState != .notStarted {
-                gameStateCard
-            }
         }
         .padding(.horizontal, 24)
     }
@@ -148,58 +141,24 @@ struct StartView: View {
         .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
     }
 
-    private var gameStateCard: some View {
-        VStack(spacing: 12) {
-            HStack {
-                Image(systemName: gameStateIcon)
-                    .foregroundColor(gameStateColor)
-                Text("現在の状態")
-                    .font(.headline)
-                    .fontWeight(.semibold)
-                Spacer()
-            }
 
-            HStack {
-                Text(testViewModel.gameState.displayName)
-                    .font(.subheadline)
-                    .foregroundColor(gameStateColor)
-                Spacer()
-
-                if testViewModel.gameState.shouldShowTimer {
-                    TimerView(
-                        elapsedTime: testViewModel.elapsedTime,
-                        gameState: testViewModel.gameState,
-                        style: .compact
-                    )
-                }
-            }
-        }
-        .padding(16)
-        .background(gameStateColor.opacity(0.1))
-        .cornerRadius(12)
-    }
 
     // MARK: - Button Section
     private var buttonSection: some View {
         VStack(spacing: 16) {
             // Main action button
             Button(action: {
-                if testViewModel.gameState.canStartTest {
-                    showingConfirmation = true
-                } else {
-                    handleResumeOrStop()
-                }
+                showingConfirmation = true
             }) {
-                Text(mainButtonTitle)
+                Text("検査開始")
                     .font(.title2)
                     .fontWeight(.semibold)
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 16)
-                    .background(mainButtonColor)
+                    .background(.blue)
                     .cornerRadius(12)
             }
-            .disabled(!mainButtonEnabled)
 
             // History button (centered)
             Button(action: {
@@ -218,125 +177,6 @@ struct StartView: View {
             }
         }
         .padding(.horizontal, 24)
-    }
-
-    // MARK: - Quick Stats Section
-    private var quickStatsSection: some View {
-        VStack(spacing: 12) {
-            Text("クイック統計")
-                .font(.headline)
-                .fontWeight(.semibold)
-
-            HStack(spacing: 20) {
-                StatItem(
-                    title: "検査回数",
-                    value: "\(historyViewModel.testResults.count)",
-                    icon: "number.circle"
-                )
-
-                StatItem(
-                    title: "平均時間",
-                    value: historyViewModel.averageTime,
-                    icon: "clock"
-                )
-
-                StatItem(
-                    title: "最短時間",
-                    value: historyViewModel.bestTime,
-                    icon: "star.circle"
-                )
-            }
-        }
-        .padding(20)
-        .background(Color(.secondarySystemBackground))
-        .cornerRadius(16)
-        .padding(.horizontal, 24)
-    }
-
-    // MARK: - Computed Properties
-    private var backgroundGradient: LinearGradient {
-        LinearGradient(
-            gradient: Gradient(colors: [
-                Color(.systemBackground),
-                Color(.systemBackground).opacity(0.8)
-            ]),
-            startPoint: .top,
-            endPoint: .bottom
-        )
-    }
-
-    private var gameStateIcon: String {
-        switch testViewModel.gameState {
-        case .notStarted: return "play.circle"
-        case .inProgress: return "pause.circle"
-        case .paused: return "play.circle"
-        case .completed: return "checkmark.circle"
-        case .cancelled: return "xmark.circle"
-        default: return "questionmark.circle"
-        }
-    }
-
-    private var gameStateColor: Color {
-        switch testViewModel.gameState {
-        case .notStarted: return .blue
-        case .inProgress: return .green
-        case .paused: return .orange
-        case .completed: return .green
-        case .cancelled: return .red
-        default: return .gray
-        }
-    }
-
-    private var mainButtonTitle: String {
-        switch testViewModel.gameState {
-        case .notStarted, .completed, .cancelled:
-            return "検査開始"
-        case .inProgress:
-            return "検査を一時停止"
-        case .paused:
-            return "検査を再開"
-        default:
-            return "検査開始"
-        }
-    }
-
-    private var mainButtonColor: Color {
-        switch testViewModel.gameState {
-        case .notStarted, .completed, .cancelled:
-            return .blue
-        case .inProgress:
-            return .orange
-        case .paused:
-            return .green
-        default:
-            return .blue
-        }
-    }
-
-    private var mainButtonEnabled: Bool {
-        switch testViewModel.gameState {
-        case .countdown:
-            return false
-        default:
-            return true
-        }
-    }
-
-    // MARK: - Private Methods
-    private func startTest() {
-        testViewModel.startCountdown()
-        showingCountdown = true
-    }
-
-    private func handleResumeOrStop() {
-        switch testViewModel.gameState {
-        case .inProgress:
-            testViewModel.pauseTest()
-        case .paused:
-            testViewModel.resumeTest()
-        default:
-            break
-        }
     }
 }
 
@@ -358,30 +198,6 @@ struct InstructionRow: View {
 
             Spacer()
         }
-    }
-}
-
-struct StatItem: View {
-    let title: String
-    let value: String
-    let icon: String
-
-    var body: some View {
-        VStack(spacing: 4) {
-            Image(systemName: icon)
-                .font(.title3)
-                .foregroundColor(.blue)
-
-            Text(value)
-                .font(.callout)
-                .fontWeight(.semibold)
-                .monospacedDigit()
-
-            Text(title)
-                .font(.caption)
-                .foregroundColor(.secondary)
-        }
-        .frame(maxWidth: .infinity)
     }
 }
 
