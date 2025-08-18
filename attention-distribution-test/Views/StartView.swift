@@ -55,7 +55,7 @@ struct StartView: View {
         }
         .onAppear {
             Task {
-                await historyViewModel.refresh()
+                await historyViewModel.loadTestResults()
             }
         }
     }
