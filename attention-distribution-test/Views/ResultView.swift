@@ -98,4 +98,5 @@ struct ResultView: View {
 
 #Preview {
     ResultView()
+        .environmentObject(TestManager())
 }
