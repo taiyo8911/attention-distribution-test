@@ -9,22 +9,24 @@ import SwiftUI
 
 // MARK: - Grid Cell Component
 struct GridCell: View {
-    
+
     // MARK: - Properties
     let number: Int
     let isSelected: Bool
     let cellSize: CGFloat
-    let action: () -> Void
-    
+
     // Optional styling properties
     var isCurrentTarget: Bool = false
     var isCompleted: Bool = false
     var animationDelay: Double = 0
-    
+
+    // Action closure - must be last for trailing closure syntax
+    let action: () -> Void
+
     // MARK: - State
     @State private var isPressed = false
     @State private var showCompletionAnimation = false
-    
+
     // MARK: - Body
     var body: some View {
         Button(action: {
@@ -38,7 +40,7 @@ struct GridCell: View {
                         RoundedRectangle(cornerRadius: cellCornerRadius)
                             .stroke(borderColor, lineWidth: borderWidth)
                     )
-                
+
                 // Number text
                 if number >= 0 {
                     Text("\(number)")
@@ -54,7 +56,7 @@ struct GridCell: View {
                             value: isSelected
                         )
                 }
-                
+
                 // Completion overlay
                 if showCompletionAnimation {
                     Circle()
@@ -87,43 +89,43 @@ struct GridCell: View {
             }
         }
     }
-    
+
     // MARK: - Private Methods
     private func performAction() {
         // Visual feedback
         withAnimation(.easeInOut(duration: 0.1)) {
             isPressed = true
         }
-        
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             withAnimation(.easeInOut(duration: 0.1)) {
                 isPressed = false
             }
         }
-        
+
         // Execute action
         action()
     }
-    
+
     private func triggerCompletionAnimation() {
         withAnimation(.easeOut(duration: 0.5)) {
             showCompletionAnimation = true
         }
-        
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             showCompletionAnimation = false
         }
     }
-    
+
     // MARK: - Computed Properties
     private var cellCornerRadius: CGFloat {
         cellSize * 0.1
     }
-    
+
     private var fontSize: CGFloat {
         cellSize * 0.6 // 60% of cell size as per specification
     }
-    
+
     private var fontWeight: Font.Weight {
         if isCurrentTarget {
             return .bold
@@ -133,7 +135,7 @@ struct GridCell: View {
             return .medium
         }
     }
-    
+
     private var textScale: CGFloat {
         if isSelected {
             return 1.1
@@ -143,7 +145,7 @@ struct GridCell: View {
             return 1.0
         }
     }
-    
+
     private var backgroundColor: Color {
         if isCompleted {
             return Color.green.opacity(0.2)
@@ -155,7 +157,7 @@ struct GridCell: View {
             return Color.white
         }
     }
-    
+
     private var textColor: Color {
         if isCompleted {
             return .green
@@ -167,7 +169,7 @@ struct GridCell: View {
             return .black
         }
     }
-    
+
     private var borderColor: Color {
         if isSelected {
             return .yellow
@@ -177,7 +179,7 @@ struct GridCell: View {
             return .black
         }
     }
-    
+
     private var borderWidth: CGFloat {
         if isSelected || isCurrentTarget {
             return 2.0
@@ -194,7 +196,7 @@ extension GridCell {
         case highlighted
         case completed
         case error
-        
+
         var backgroundColor: Color {
             switch self {
             case .normal: return .white
@@ -203,7 +205,7 @@ extension GridCell {
             case .error: return .red.opacity(0.2)
             }
         }
-        
+
         var borderColor: Color {
             switch self {
             case .normal: return .black
@@ -212,7 +214,7 @@ extension GridCell {
             case .error: return .red
             }
         }
-        
+
         var textColor: Color {
             switch self {
             case .normal: return .black
@@ -228,22 +230,22 @@ extension GridCell {
 extension GridCell {
     private var accessibilityLabel: String {
         var label = "数字\(number)"
-        
+
         if isSelected {
             label += "、選択中"
         }
-        
+
         if isCurrentTarget {
             label += "、次のターゲット"
         }
-        
+
         if isCompleted {
             label += "、完了"
         }
-        
+
         return label
     }
-    
+
     private var accessibilityHint: String {
         if isCurrentTarget {
             return "この数字をタップしてください"
@@ -263,55 +265,61 @@ struct GridCell_Previews: PreviewProvider {
                 GridCell(
                     number: 0,
                     isSelected: false,
-                    cellSize: 60
-                ) {
-                    print("Tapped 0")
-                }
-                
+                    cellSize: 60,
+                    action: {
+                        print("Tapped 0")
+                    }
+                )
+
                 GridCell(
                     number: 15,
                     isSelected: true,
-                    cellSize: 60
-                ) {
-                    print("Tapped 15")
-                }
-                
+                    cellSize: 60,
+                    action: {
+                        print("Tapped 15")
+                    }
+                )
+
                 GridCell(
                     number: 23,
                     isSelected: false,
                     cellSize: 60,
-                    isCurrentTarget: true
-                ) {
-                    print("Tapped 23")
-                }
-                
+                    isCurrentTarget: true,
+                    action: {
+                        print("Tapped 23")
+                    }
+                )
+
                 GridCell(
                     number: 5,
                     isSelected: false,
                     cellSize: 60,
-                    isCompleted: true
-                ) {
-                    print("Tapped 5")
-                }
+                    isCompleted: true,
+                    action: {
+                        print("Tapped 5")
+                    }
+                )
             }
-            
+
             // Different sizes
             HStack(spacing: 20) {
                 GridCell(
                     number: 42,
                     isSelected: false,
-                    cellSize: 40
-                ) {
-                    print("Tapped small")
-                }
-                
+                    cellSize: 40,
+                    action: {
+                        print("Tapped small")
+                    }
+                )
+
                 GridCell(
                     number: 7,
                     isSelected: false,
-                    cellSize: 80
-                ) {
-                    print("Tapped large")
-                }
+                    cellSize: 80,
+                    action: {
+                        print("Tapped large")
+                    }
+                )
             }
         }
         .padding()

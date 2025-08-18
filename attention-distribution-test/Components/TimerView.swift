@@ -5,26 +5,23 @@
 //  Created by Taiyo KOSHIBA on 2025/08/18.
 //
 
-
 import SwiftUI
 
 // MARK: - Timer View Component
 struct TimerView: View {
-    
+
     // MARK: - Properties
     let elapsedTime: TimeInterval
     let gameState: GameState
-    
+
     // Optional styling properties
     var style: TimerStyle = .normal
     var showMilliseconds: Bool = true
     var animateChanges: Bool = true
-    
+
     // MARK: - State
     @State private var isBlinking = false
-    @State private var currentDigits: [String] = []
-    @State private var previousDigits: [String] = []
-    
+
     // MARK: - Body
     var body: some View {
         HStack(spacing: digitSpacing) {
@@ -39,39 +36,16 @@ struct TimerView: View {
                         value: isBlinking
                     )
             }
-            
+
             // Time display
-            HStack(spacing: separatorSpacing) {
-                // Minutes
-                DigitGroup(
-                    digits: Array(formattedTime.split(separator: ":")[0]),
-                    style: digitStyle
-                )
-                
-                Text(":")
-                    .font(separatorFont)
-                    .foregroundColor(textColor)
-                    .opacity(isBlinking ? 0.3 : 1.0)
-                
-                // Seconds
-                DigitGroup(
-                    digits: Array(formattedTime.split(separator: ":")[1]),
-                    style: digitStyle
-                )
-                
-                if showMilliseconds {
-                    Text(":")
-                        .font(separatorFont)
-                        .foregroundColor(textColor)
-                        .opacity(isBlinking ? 0.3 : 1.0)
-                    
-                    // Milliseconds
-                    DigitGroup(
-                        digits: Array(formattedTime.split(separator: ":")[2]),
-                        style: digitStyle.smaller()
-                    )
-                }
-            }
+            Text(formattedTime)
+                .font(.system(
+                    size: style.fontSize,
+                    weight: style.fontWeight,
+                    design: .monospaced
+                ))
+                .foregroundColor(textColor)
+                .monospacedDigit()
             .monospacedDigit()
         }
         .padding(style.padding)
@@ -95,7 +69,7 @@ struct TimerView: View {
             }
         }
     }
-    
+
     // MARK: - Private Methods
     private func updateBlinkingState() {
         switch gameState {
@@ -107,22 +81,17 @@ struct TimerView: View {
             isBlinking = false
         }
     }
-    
+
     private func updateDigitAnimation(_ newTime: TimeInterval) {
-        let newFormatted = newTime.formattedTime
-        let newDigitArray = Array(newFormatted.replacingOccurrences(of: ":", with: ""))
-        
-        if newDigitArray != currentDigits {
-            previousDigits = currentDigits
-            currentDigits = newDigitArray.map { String($0) }
-        }
+        // Simplified - no individual digit animation for now
+        // This can be implemented later if needed
     }
-    
+
     // MARK: - Computed Properties
     private var formattedTime: String {
         return elapsedTime.formattedTime
     }
-    
+
     private var iconName: String {
         switch gameState {
         case .inProgress:
@@ -135,7 +104,7 @@ struct TimerView: View {
             return "clock"
         }
     }
-    
+
     private var iconColor: Color {
         switch gameState {
         case .inProgress:
@@ -148,11 +117,11 @@ struct TimerView: View {
             return .gray
         }
     }
-    
+
     private var iconSize: CGFloat {
         style.fontSize * 0.8
     }
-    
+
     private var textColor: Color {
         switch gameState {
         case .inProgress:
@@ -165,7 +134,7 @@ struct TimerView: View {
             return .gray
         }
     }
-    
+
     private var backgroundColor: Color {
         switch style {
         case .normal:
@@ -176,7 +145,7 @@ struct TimerView: View {
             return Color(.secondarySystemBackground)
         }
     }
-    
+
     private var borderColor: Color {
         switch gameState {
         case .inProgress:
@@ -187,30 +156,17 @@ struct TimerView: View {
             return .clear
         }
     }
-    
+
     private var borderWidth: CGFloat {
         gameState == .inProgress || gameState == .paused ? 1.0 : 0
     }
-    
+
     private var digitSpacing: CGFloat {
         style.spacing
     }
-    
-    private var separatorSpacing: CGFloat {
-        style.spacing * 0.5
-    }
-    
+
     private var separatorFont: Font {
         .system(size: style.fontSize * 0.8, weight: .medium, design: .monospaced)
-    }
-    
-    private var digitStyle: DigitStyle {
-        DigitStyle(
-            fontSize: style.fontSize,
-            fontWeight: style.fontWeight,
-            textColor: textColor,
-            backgroundColor: style.digitBackgroundColor
-        )
     }
 }
 
@@ -220,7 +176,7 @@ extension TimerView {
         case normal
         case prominent
         case compact
-        
+
         var fontSize: CGFloat {
             switch self {
             case .normal: return 24
@@ -228,7 +184,7 @@ extension TimerView {
             case .compact: return 18
             }
         }
-        
+
         var fontWeight: Font.Weight {
             switch self {
             case .normal: return .semibold
@@ -236,7 +192,7 @@ extension TimerView {
             case .compact: return .medium
             }
         }
-        
+
         var spacing: CGFloat {
             switch self {
             case .normal: return 8
@@ -244,7 +200,7 @@ extension TimerView {
             case .compact: return 4
             }
         }
-        
+
         var padding: EdgeInsets {
             switch self {
             case .normal: return EdgeInsets(top: 8, leading: 12, bottom: 8, trailing: 12)
@@ -252,7 +208,7 @@ extension TimerView {
             case .compact: return EdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8)
             }
         }
-        
+
         var cornerRadius: CGFloat {
             switch self {
             case .normal: return 8
@@ -260,11 +216,11 @@ extension TimerView {
             case .compact: return 6
             }
         }
-        
+
         var textColor: Color {
             return .primary
         }
-        
+
         var digitBackgroundColor: Color {
             switch self {
             case .normal: return .clear
@@ -272,7 +228,7 @@ extension TimerView {
             case .compact: return .clear
             }
         }
-        
+
         var showIcon: Bool {
             switch self {
             case .normal: return true
@@ -287,7 +243,7 @@ extension TimerView {
 struct DigitGroup: View {
     let digits: [Character]
     let style: DigitStyle
-    
+
     var body: some View {
         HStack(spacing: 2) {
             ForEach(Array(digits.enumerated()), id: \.offset) { index, digit in
@@ -304,9 +260,9 @@ struct DigitGroup: View {
 struct DigitView: View {
     let digit: String
     let style: DigitStyle
-    
+
     @State private var isAnimating = false
-    
+
     var body: some View {
         Text(digit)
             .font(.system(
@@ -325,7 +281,7 @@ struct DigitView: View {
                 withAnimation(.easeInOut(duration: 0.1)) {
                     isAnimating = true
                 }
-                
+
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     withAnimation(.easeInOut(duration: 0.1)) {
                         isAnimating = false
@@ -341,11 +297,11 @@ struct DigitStyle {
     let fontWeight: Font.Weight
     let textColor: Color
     let backgroundColor: Color
-    
+
     var minWidth: CGFloat {
         fontSize * 0.7
     }
-    
+
     func smaller() -> DigitStyle {
         DigitStyle(
             fontSize: fontSize * 0.8,
@@ -360,7 +316,7 @@ struct DigitStyle {
 extension TimerView {
     private var accessibilityLabel: String {
         let timeString = elapsedTime.formattedTime.replacingOccurrences(of: ":", with: "分").appending("秒")
-        
+
         switch gameState {
         case .inProgress:
             return "経過時間: \(timeString)"
@@ -383,13 +339,13 @@ struct TimerView_Previews: PreviewProvider {
                 gameState: .inProgress,
                 style: .normal
             )
-            
+
             TimerView(
                 elapsedTime: 125.67,
                 gameState: .paused,
                 style: .prominent
             )
-            
+
             TimerView(
                 elapsedTime: 125.67,
                 gameState: .completed,
