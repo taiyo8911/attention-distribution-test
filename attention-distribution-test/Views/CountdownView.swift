@@ -27,8 +27,6 @@ struct CountdownView: View {
                     Text("\(countdownNumber)")
                         .font(.system(size: 120, weight: .bold, design: .rounded))
                         .foregroundColor(.white)
-                        .scaleEffect(countdownNumber > 0 ? 1.0 : 0.5)
-                        .animation(.easeInOut(duration: 0.5), value: countdownNumber)
 
                     Spacer()
                 }
