@@ -14,7 +14,6 @@ struct StartView: View {
     @State private var showingConfirmation = false
     @State private var showingHistory = false
     @State private var showingCountdown = false
-    @State private var showingSettings = false
 
     var body: some View {
         GeometryReader { geometry in
@@ -53,9 +52,6 @@ struct StartView: View {
         .sheet(isPresented: $showingHistory) {
             HistoryView()
                 .environmentObject(historyViewModel)
-        }
-        .sheet(isPresented: $showingSettings) {
-            SettingsView()
         }
         .fullScreenCover(isPresented: $showingCountdown) {
             CountdownView()
@@ -205,39 +201,20 @@ struct StartView: View {
             }
             .disabled(!mainButtonEnabled)
 
-            // Secondary buttons
-            HStack(spacing: 12) {
-                Button(action: {
-                    showingHistory = true
-                }) {
-                    HStack {
-                        Image(systemName: "clock.arrow.circlepath")
-                        Text("履歴確認")
-                    }
-                    .font(.callout)
-//                    .fontWeight(.semibold)
-                    .foregroundColor(.blue)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 12)
-                    .background(Color.blue.opacity(0.1))
-                    .cornerRadius(10)
+            // History button (centered)
+            Button(action: {
+                showingHistory = true
+            }) {
+                HStack {
+                    Image(systemName: "clock.arrow.circlepath")
+                    Text("履歴確認")
                 }
-
-                Button(action: {
-                    showingSettings = true
-                }) {
-                    HStack {
-                        Image(systemName: "gear")
-                        Text("設定")
-                    }
-                    .font(.callout)
-//                    .fontWeight(.semibold)
-                    .foregroundColor(.gray)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 12)
-                    .background(Color.gray.opacity(0.1))
-                    .cornerRadius(10)
-                }
+                .font(.callout)
+                .foregroundColor(.blue)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 12)
+                .background(Color.blue.opacity(0.1))
+                .cornerRadius(10)
             }
         }
         .padding(.horizontal, 24)
@@ -405,35 +382,6 @@ struct StatItem: View {
                 .foregroundColor(.secondary)
         }
         .frame(maxWidth: .infinity)
-    }
-}
-
-// MARK: - Settings View (Placeholder)
-struct SettingsView: View {
-    @Environment(\.dismiss) var dismiss
-
-    var body: some View {
-        NavigationView {
-            VStack {
-                Text("設定画面")
-                    .font(.title)
-
-                Text("今後の機能拡張予定")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-
-                Spacer()
-            }
-            .navigationTitle("設定")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("完了") {
-                        dismiss()
-                    }
-                }
-            }
-        }
     }
 }
 
