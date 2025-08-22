@@ -117,7 +117,7 @@ struct StartView: View {
             VStack(alignment: .leading, spacing: 8) {
                 InstructionRow(
                     icon: "grid.circle",
-                    text: "7×7のマスに0〜48の数字が配置されます"
+                    text: "7×7のマスに0〜48の数字がランダムに並んでいます"
                 )
                 InstructionRow(
                     icon: "hand.tap",
@@ -125,11 +125,11 @@ struct StartView: View {
                 )
                 InstructionRow(
                     icon: "checkmark.circle",
-                    text: "数字をタップしたら確認ボタンを押してください"
+                    text: "数字を一つ押すたびに確認ボタンを押してから次へ進んでください"
                 )
                 InstructionRow(
                     icon: "timer",
-                    text: "完了までの時間を計測します"
+                    text: "終了するまでの時間を計測します"
                 )
             }
         }
