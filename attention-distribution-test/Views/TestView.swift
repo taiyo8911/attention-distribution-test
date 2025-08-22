@@ -15,12 +15,6 @@ struct TestView: View {
     var body: some View {
         GeometryReader { geometry in
             VStack(spacing: 16) {
-                // タイマー表示
-                Text(formattedTime)
-                    .font(.title)
-                    .fontWeight(.semibold)
-                    .monospacedDigit()
-
                 // 中断ボタン
                 Button("やめる") {
                     showingStopConfirmation = true
@@ -100,12 +94,6 @@ struct TestView: View {
             }
             Button("続ける", role: .cancel) { }
         }
-    }
-
-    private var formattedTime: String {
-        let minutes = Int(testViewModel.elapsedTime) / 60
-        let seconds = Int(testViewModel.elapsedTime) % 60
-        return String(format: "%02d:%02d", minutes, seconds)
     }
 }
 
