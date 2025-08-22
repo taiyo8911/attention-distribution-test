@@ -39,7 +39,8 @@ struct TestModel {
     }
 
     var canConfirm: Bool {
-        return selectedPosition != nil && !showError
+        // 何かが選択されていて、エラー状態でない場合に確認可能
+        return selectedPosition != nil && !showError && gameState == .inProgress
     }
 
     // MARK: - Initializer
@@ -113,33 +114,52 @@ struct TestModel {
     mutating func tapNumber(at row: Int, col: Int) -> Bool {
         guard gameState == .inProgress else { return false }
 
-        let tappedNumber = getNumber(at: row, col: col)
+        // 数字をタップした時は選択状態のみ設定（正誤判定はしない）
+        selectedPosition = GridPosition(row: row, col: col)
+        lastTappedPosition = GridPosition(row: row, col: col)
 
-        if tappedNumber == currentNumber {
-            // 正解
-            selectedPosition = GridPosition(row: row, col: col)
-            showError = false
-            return true
-        } else {
-            // 不正解
-            selectedPosition = nil
-            showError = true
-            return false
-        }
+        // エラー状態をクリア（新しい選択をした場合）
+        showError = false
+        errorMessage = ""
+
+        return true
     }
 
     mutating func confirmSelection() -> Bool {
-        guard canConfirm else { return false }
+        guard let position = selectedPosition else { return false }
+        guard gameState == .inProgress else { return false }
 
-        currentNumber += 1
-        selectedPosition = nil
-        showError = false
+        let selectedNumber = getNumber(at: position.row, col: position.col)
 
-        if currentNumber > targetNumber {
-            completeTest()
-            return true
+        // タップ履歴に記録
+        let tapRecord = TapRecord(
+            number: selectedNumber,
+            position: position,
+            timestamp: Date(),
+            isCorrect: selectedNumber == currentNumber
+        )
+        tapHistory.append(tapRecord)
+
+        if selectedNumber == currentNumber {
+            // 正解の場合
+            currentNumber += 1
+            selectedPosition = nil
+            showError = false
+            errorMessage = ""
+
+            // 完了チェック
+            if currentNumber > targetNumber {
+                completeTest()
+                return true
+            }
+            return false
+        } else {
+            // 不正解の場合
+            showError = true
+            errorMessage = "正しい数字をタップしてください。"
+            selectedPosition = nil // 選択状態をリセット
+            return false
         }
-        return false
     }
 }
 

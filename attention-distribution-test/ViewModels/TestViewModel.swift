@@ -61,13 +61,21 @@ class TestViewModel: ObservableObject {
     }
 
     func tapNumber(at row: Int, col: Int) {
+        // 数字をタップした時は選択状態のみ設定
         let success = testModel.tapNumber(at: row, col: col)
-        print("Tapped (\(row),\(col)): \(testModel.getNumber(at: row, col: col)), Success: \(success)")
+        let tappedNumber = testModel.getNumber(at: row, col: col)
+        print("Tapped (\(row),\(col)): \(tappedNumber), Selected: \(success)")
     }
 
     func confirmSelection() {
+        // 確認ボタンが押された時に正誤判定を実行
         let completed = testModel.confirmSelection()
-        if completed {
+
+        if testModel.showError {
+            // 不正解の場合
+            print("Incorrect selection. Error: \(testModel.errorMessage)")
+        } else if completed {
+            // 完了の場合
             timerService.stop()
 
             Task {
@@ -77,6 +85,9 @@ class TestViewModel: ObservableObject {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 self.showingResultView = true
             }
+        } else {
+            // 正解で次へ進む場合
+            print("Correct! Moving to next number: \(testModel.currentNumber)")
         }
     }
 
