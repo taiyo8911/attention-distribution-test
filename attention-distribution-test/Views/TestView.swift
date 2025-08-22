@@ -15,6 +15,8 @@ struct TestView: View {
     var body: some View {
         GeometryReader { geometry in
             VStack(spacing: 16) {
+                Spacer()
+
                 // 中断ボタン
                 Button("やめる") {
                     showingStopConfirmation = true
@@ -32,10 +34,15 @@ struct TestView: View {
 
                 // エラーメッセージ
                 if testViewModel.showError {
-                    Text("⚠️ 間違いです。正しい数字をタップしてください。")
+                    Text("正しい数字をタップしてください。")
                         .foregroundColor(.red)
+                        .font(.headline)
                         .multilineTextAlignment(.center)
-                        .padding(.horizontal)
+                        .padding(12)
+                } else {
+                    Text("")
+                        .frame(height: 20) // エラーメッセージのスペース確保
+                        .padding(12)
                 }
 
                 // 7x7グリッド
@@ -76,6 +83,8 @@ struct TestView: View {
                 .cornerRadius(12)
                 .disabled(!testViewModel.canConfirm)
                 .padding(.horizontal)
+
+                Spacer()
             }
             .padding()
         }
