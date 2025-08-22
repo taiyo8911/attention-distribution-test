@@ -15,7 +15,11 @@ struct TestView: View {
     var body: some View {
         GeometryReader { geometry in
             VStack(spacing: 16) {
-                Spacer()
+                // タイマー
+                Text(formattedTime)
+                    .font(.system(size: 32, weight: .bold, design: .monospaced))
+                    .monospacedDigit()
+                    .padding(12)
 
                 // 中断ボタン
                 Button("やめる") {
@@ -34,13 +38,14 @@ struct TestView: View {
 
                 // エラーメッセージ
                 if testViewModel.showError {
-                    Text("正しい数字をタップしてください。")
+                    Text("正しい数字をタップしてください")
                         .foregroundColor(.red)
                         .font(.headline)
                         .multilineTextAlignment(.center)
                         .padding(12)
                 } else {
                     Text("")
+                        .font(.headline)
                         .frame(height: 20) // エラーメッセージのスペース確保
                         .padding(12)
                 }
@@ -72,17 +77,17 @@ struct TestView: View {
                 Spacer()
 
                 // 確認ボタン
-                Button("確認") {
+                Button(action: {
                     testViewModel.confirmSelection()
+                }) {
+                    Text("確認")
+                        .font(.title2)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity, maxHeight: 100)
                 }
-                .font(.title2)
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 16)
                 .background(testViewModel.canConfirm ? .blue : .gray)
                 .cornerRadius(12)
                 .disabled(!testViewModel.canConfirm)
-                .padding(.horizontal)
 
                 Spacer()
             }
@@ -103,6 +108,13 @@ struct TestView: View {
             }
             Button("続ける", role: .cancel) { }
         }
+    }
+
+    // タイマー用のフォーマットされた時間文字列
+    private var formattedTime: String {
+        let minutes = Int(testViewModel.elapsedTime) / 60
+        let seconds = Int(testViewModel.elapsedTime) % 60
+        return String(format: "%02d:%02d", minutes, seconds)
     }
 }
 
