@@ -23,7 +23,7 @@ struct ResultView: View {
             // 完了時間
             VStack(spacing: 8) {
                 Text("完了時間")
-                    .font(.headline)
+                    .font(.title2)
                     .foregroundColor(.secondary)
 
                 Text(formattedCompletionTime)
@@ -32,31 +32,16 @@ struct ResultView: View {
                     .monospacedDigit()
             }
 
-            Spacer()
-
-            // ボタン
-            VStack(spacing: 16) {
-                Button("もう一度") {
-                    testViewModel.resetTest()
-                    dismiss()
-                }
-                .font(.title3)
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 16)
-                .background(.blue)
-                .cornerRadius(12)
-
-                Button("メインへ戻る") {
-                    dismiss()
-                }
-                .font(.title3)
-                .foregroundColor(.red)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 16)
-                .background(Color.red.opacity(0.1))
-                .cornerRadius(12)
+            // メインへ戻るボタン
+            Button("メイン画面へ戻る") {
+                dismiss()
             }
+            .font(.title3)
+            .foregroundColor(.white)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 16)
+            .background(.blue)
+            .cornerRadius(12)
             .padding(.horizontal, 20)
 
             Spacer()
