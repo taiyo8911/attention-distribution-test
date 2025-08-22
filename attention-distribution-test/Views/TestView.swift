@@ -22,10 +22,15 @@ struct TestView: View {
                     .monospacedDigit()
 
                 // 中断ボタン
-                Button("検査をやめる") {
+                Button("やめる") {
                     showingStopConfirmation = true
                 }
-                .foregroundColor(.red)
+                .font(.title3)
+                .foregroundColor(.white)
+                .frame(width: 120)
+                .padding(12)
+                .background(.red)
+                .cornerRadius(12)
 
                 // 次に押す数字
                 Text("次に押す: \(testViewModel.currentNumber)")

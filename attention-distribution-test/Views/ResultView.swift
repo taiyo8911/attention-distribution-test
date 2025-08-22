@@ -16,7 +16,7 @@ struct ResultView: View {
             Spacer()
 
             // タイトル
-            Text("検査完了")
+            Text("検査終了")
                 .font(.largeTitle)
                 .fontWeight(.bold)
 
@@ -41,7 +41,6 @@ struct ResultView: View {
                     dismiss()
                 }
                 .font(.title3)
-//                .fontWeight(.semibold)
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 16)
@@ -52,7 +51,6 @@ struct ResultView: View {
                     dismiss()
                 }
                 .font(.title3)
-//                .fontWeight(.semibold)
                 .foregroundColor(.red)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 16)
