@@ -15,20 +15,18 @@ struct TestResult {
     let startTime: Date
     let endTime: Date
 
-    // MARK: - Initializers
+    // MARK: - Initializer
     init(
         startTime: Date,
         endTime: Date,
-        completionTime: TimeInterval? = nil
+        completionTime: TimeInterval
     ) {
         self.id = UUID()
         self.date = endTime
         self.startTime = startTime
         self.endTime = endTime
-        self.completionTime = completionTime ?? endTime.timeIntervalSince(startTime)
+        self.completionTime = completionTime
     }
-
-
 }
 
 // MARK: - TestResult Extensions
@@ -50,12 +48,6 @@ extension TestResult: Comparable {
 
 // MARK: - Computed Properties
 extension TestResult {
-    var isPersonalBest: Bool {
-        // This would be determined by comparing with other results
-        // Implementation would be handled by the HistoryViewModel
-        return false
-    }
-
     var formattedDate: String {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy/MM/dd HH:mm"
@@ -65,12 +57,6 @@ extension TestResult {
     var formattedTime: String {
         return completionTime.formattedTime
     }
-
-    var shortFormattedTime: String {
-        let minutes = Int(completionTime) / 60
-        let seconds = Int(completionTime) % 60
-        return String(format: "%02d:%02d", minutes, seconds)
-    }
 }
 
 // MARK: - TimeInterval Extension for Formatting
@@ -79,19 +65,5 @@ extension TimeInterval {
         let minutes = Int(self) / 60
         let seconds = Int(self) % 60
         return String(format: "%02d:%02d", minutes, seconds)
-    }
-
-    var shortFormattedTime: String {
-        let minutes = Int(self) / 60
-        let seconds = Int(self) % 60
-        return String(format: "%02d:%02d", minutes, seconds)
-    }
-
-    // Legacy method for backward compatibility (with milliseconds)
-    var detailedFormattedTime: String {
-        let minutes = Int(self) / 60
-        let seconds = Int(self) % 60
-        let milliseconds = Int((self.truncatingRemainder(dividingBy: 1)) * 100)
-        return String(format: "%02d:%02d:%02d", minutes, seconds, milliseconds)
     }
 }
