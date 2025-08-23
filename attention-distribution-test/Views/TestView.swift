@@ -33,8 +33,14 @@ struct TestView: View {
                 .cornerRadius(12)
 
                 // 次に押す数字
-                Text("次に押す: \(testViewModel.currentNumber)")
-                    .font(.headline)
+                if testViewModel.currentNumber <= 48 {
+                    Text("次に押す: \(testViewModel.currentNumber)")
+                        .font(.headline)
+                } else {
+                    Text("")
+                        .font(.headline)
+                        .frame(height: 20) // スペース確保
+                }
 
                 // エラーメッセージ
                 if testViewModel.showError {
