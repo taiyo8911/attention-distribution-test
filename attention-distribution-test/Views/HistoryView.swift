@@ -61,10 +61,6 @@ struct HistoryView: View {
                     VStack(alignment: .leading, spacing: 4) {
                         Text(result.formattedDate)
                             .font(.callout)
-
-                        Text(result.deviceType.displayName)
-                            .font(.caption)
-                            .foregroundColor(.secondary)
                     }
 
                     Spacer()

@@ -97,14 +97,6 @@ class DataService: DataServiceProtocol {
             return results
         } catch {
             print("Failed to load test results: \(error)")
-
-            // Try to load legacy data format
-            if let legacyResults = try? loadLegacyResults() {
-                // Migrate to new format
-                try await saveResults(legacyResults)
-                return legacyResults
-            }
-
             throw DataServiceError.decryptionFailed
         }
     }
@@ -136,27 +128,7 @@ class DataService: DataServiceProtocol {
         }
     }
 
-    private func loadLegacyResults() throws -> [TestResult] {
-        guard let data = userDefaults.data(forKey: "TestHistory") else {
-            return []
-        }
 
-        // Try to decode legacy format
-        struct LegacyTestResult: Codable {
-            let date: Date
-            let completionTime: TimeInterval
-            let deviceType: String
-        }
-
-        let legacyResults = try decoder.decode([LegacyTestResult].self, from: data)
-        return legacyResults.map { legacy in
-            TestResult(
-                date: legacy.date,
-                completionTime: legacy.completionTime,
-                deviceType: legacy.deviceType
-            )
-        }
-    }
 }
 
 // MARK: - Mock Data Service (for testing/previews)
