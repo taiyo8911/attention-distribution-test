@@ -22,25 +22,10 @@ struct TestModel {
     private(set) var selectedPosition: GridPosition?
     private(set) var lastTappedPosition: GridPosition?
     private(set) var showError: Bool = false
-    private(set) var errorMessage: String = ""
-
-    // MARK: - Timing
-    private(set) var startTime: Date?
-    private(set) var endTime: Date?
-    private(set) var pauseStartTime: Date?
-    private(set) var totalPauseTime: TimeInterval = 0
-
-    // MARK: - History
-    private(set) var tapHistory: [TapRecord] = []
 
     // MARK: - Computed Properties
     var isComplete: Bool {
         return currentNumber > targetNumber
-    }
-
-    var canConfirm: Bool {
-        // 何かが選択されていて、エラー状態でない場合に確認可能
-        return selectedPosition != nil && !showError && gameState == .inProgress
     }
 
     // MARK: - Initializer
@@ -86,12 +71,10 @@ struct TestModel {
     // MARK: - Game State Management
     mutating func startTest() {
         gameState = .inProgress
-        startTime = Date()
         generateGrid()
         currentNumber = 0
         selectedPosition = nil
         showError = false
-        tapHistory.removeAll()
     }
 
     mutating func resetTest() {
@@ -99,15 +82,11 @@ struct TestModel {
         currentNumber = 0
         selectedPosition = nil
         showError = false
-        startTime = nil
-        endTime = nil
         gridNumbers = []
-        tapHistory.removeAll()
     }
 
     mutating func completeTest() {
         gameState = .completed
-        endTime = Date()
     }
 
     // MARK: - User Interaction
@@ -120,7 +99,6 @@ struct TestModel {
 
         // エラー状態をクリア（新しい選択をした場合）
         showError = false
-        errorMessage = ""
 
         return true
     }
@@ -131,21 +109,11 @@ struct TestModel {
 
         let selectedNumber = getNumber(at: position.row, col: position.col)
 
-        // タップ履歴に記録
-        let tapRecord = TapRecord(
-            number: selectedNumber,
-            position: position,
-            timestamp: Date(),
-            isCorrect: selectedNumber == currentNumber
-        )
-        tapHistory.append(tapRecord)
-
         if selectedNumber == currentNumber {
             // 正解の場合
             currentNumber += 1
             selectedPosition = nil
             showError = false
-            errorMessage = ""
 
             // 完了チェック
             if currentNumber > targetNumber {
@@ -156,7 +124,6 @@ struct TestModel {
         } else {
             // 不正解の場合
             showError = true
-            errorMessage = "正しい数字をタップしてください。"
             selectedPosition = nil // 選択状態をリセット
             return false
         }
@@ -167,11 +134,4 @@ struct TestModel {
 struct GridPosition: Equatable {
     let row: Int
     let col: Int
-}
-
-struct TapRecord {
-    let number: Int
-    let position: GridPosition
-    let timestamp: Date
-    let isCorrect: Bool
 }
