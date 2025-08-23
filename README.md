@@ -242,7 +242,6 @@ attention-distribution-test/
 #### TestResult 
 - 検査日時: Date型
 - 完了時間: TimeInterval型（秒）
-- デバイス情報: iPhone/iPad種別
 
 #### GameState
 - 検査の進行状態（.notStarted, .countdown, .inProgress, .completed など）
