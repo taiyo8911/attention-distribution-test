@@ -17,6 +17,9 @@ class TestViewModel: ObservableObject {
     @Published private(set) var elapsedTime: TimeInterval = 0
     @Published var showingResultView = false
 
+    // MARK: - Test Timing
+    private var testStartTime: Date?
+
     // MARK: - Dependencies
     private let timerService: TimerServiceProtocol
     private let dataService: DataServiceProtocol
@@ -26,7 +29,11 @@ class TestViewModel: ObservableObject {
     var gameState: GameState { testModel.gameState }
     var currentNumber: Int { testModel.currentNumber }
     var showError: Bool { testModel.showError }
-    var canConfirm: Bool { testModel.canConfirm }
+
+    // canConfirmをViewModelで管理
+    var canConfirm: Bool {
+        testModel.selectedPosition != nil && !testModel.showError && gameState == .inProgress
+    }
 
     // MARK: - Initializer
     init(
@@ -44,6 +51,7 @@ class TestViewModel: ObservableObject {
     }
 
     func startTest() {
+        testStartTime = Date()
         testModel.startTest()
         timerService.start()
     }
@@ -51,6 +59,7 @@ class TestViewModel: ObservableObject {
     func stopTest() {
         timerService.stop()
         testModel.resetTest()
+        testStartTime = nil
     }
 
     func resetTest() {
@@ -58,6 +67,7 @@ class TestViewModel: ObservableObject {
         testModel.resetTest()
         elapsedTime = 0
         showingResultView = false
+        testStartTime = nil
     }
 
     func tapNumber(at row: Int, col: Int) {
@@ -73,7 +83,7 @@ class TestViewModel: ObservableObject {
 
         if testModel.showError {
             // 不正解の場合
-            print("Incorrect selection. Error: \(testModel.errorMessage)")
+            print("Incorrect selection.")
         } else if completed {
             // 完了の場合
             timerService.stop()
@@ -103,7 +113,7 @@ class TestViewModel: ObservableObject {
 
     // MARK: - Private Methods
     private func saveTestResult() async {
-        guard let startTime = testModel.startTime else { return }
+        guard let startTime = testStartTime else { return }
 
         let result = TestResult(
             startTime: startTime,
