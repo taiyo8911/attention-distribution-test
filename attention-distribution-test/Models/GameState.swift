@@ -8,6 +8,7 @@
 import Foundation
 
 // MARK: - Game State Enumeration
+// ゲームの状態を管理する列挙型
 enum GameState: String, CaseIterable {
     case notStarted = "not_started"
     case inProgress = "in_progress"
@@ -15,15 +16,17 @@ enum GameState: String, CaseIterable {
     case cancelled = "cancelled"
 
     // MARK: - State Properties
+    // 今ゲームをやってるかどうか
     var isTestActive: Bool {
         switch self {
-        case .inProgress:
+        case .inProgress: // ゲーム中
             return true
         default:
             return false
         }
     }
 
+    // ゲームを開始できるかどうか
     var canStartTest: Bool {
         switch self {
         case .notStarted, .completed, .cancelled:
@@ -33,6 +36,7 @@ enum GameState: String, CaseIterable {
         }
     }
 
+    // タイマーを表示するかどうか
     var shouldShowTimer: Bool {
         switch self {
         case .inProgress, .completed:
@@ -42,6 +46,7 @@ enum GameState: String, CaseIterable {
         }
     }
 
+    // 数字を入力できるかどうか
     var shouldAcceptInput: Bool {
         switch self {
         case .inProgress:
