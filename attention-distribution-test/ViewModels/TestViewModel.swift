@@ -15,8 +15,6 @@ class TestViewModel: ObservableObject {
     // MARK: - Published Properties
     @Published private(set) var testModel = TestModel()
     @Published private(set) var elapsedTime: TimeInterval = 0
-    @Published var showingResultView = false
-    @Published var shouldReturnToStart = false
 
     // MARK: - Test Timing
     private var testStartTime: Date?
@@ -47,10 +45,6 @@ class TestViewModel: ObservableObject {
     }
 
     // MARK: - Public Methods
-    func startCountdown() {
-        // カウントダウン開始
-    }
-
     func startTest() {
         testStartTime = Date()
         testModel.startTest()
@@ -67,17 +61,7 @@ class TestViewModel: ObservableObject {
         timerService.reset()
         testModel.resetTest()
         elapsedTime = 0
-        showingResultView = false
         testStartTime = nil
-    }
-
-    func returnToStart() {
-        timerService.stop()
-        testModel.resetTest()
-        elapsedTime = 0
-        showingResultView = false
-        testStartTime = nil
-        shouldReturnToStart = true
     }
 
     func tapNumber(at row: Int, col: Int) {
@@ -87,13 +71,14 @@ class TestViewModel: ObservableObject {
         print("Tapped (\(row),\(col)): \(tappedNumber), Selected: \(success)")
     }
 
-    func confirmSelection() {
-        // 確認ボタンが押された時に正誤判定を実行
+    // 戻り値でテスト完了かどうかを返すバージョン
+    func confirmSelectionWithResult() -> Bool {
         let completed = testModel.confirmSelection()
 
         if testModel.showError {
             // 不正解の場合
             print("Incorrect selection.")
+            return false
         } else if completed {
             // 完了の場合
             timerService.stop()
@@ -102,13 +87,17 @@ class TestViewModel: ObservableObject {
                 await saveTestResult()
             }
 
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                self.showingResultView = true
-            }
+            return true
         } else {
             // 正解で次へ進む場合
             print("Correct! Moving to next number: \(testModel.currentNumber)")
+            return false
         }
+    }
+
+    func confirmSelection() {
+        // 既存のメソッドも残しておく（互換性のため）
+        _ = confirmSelectionWithResult()
     }
 
     // MARK: - Grid Helper Methods

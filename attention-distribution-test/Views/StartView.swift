@@ -7,15 +7,71 @@
 
 import SwiftUI
 
+// 画面の状態を管理する列挙型
+enum AppScreenState {
+    case start
+    case countdown
+    case test
+    case result
+}
+
 struct StartView: View {
     @EnvironmentObject var testViewModel: TestViewModel
     @EnvironmentObject var historyViewModel: HistoryViewModel
 
     @State private var showingConfirmation = false
     @State private var showingHistory = false
-    @State private var showingCountdown = false
+    @State private var currentScreen: AppScreenState = .start
 
     var body: some View {
+        ZStack {
+            // 現在の画面に応じて表示を切り替え
+            switch currentScreen {
+            case .start:
+                startScreenContent
+            case .countdown:
+                CountdownView(onComplete: {
+                    currentScreen = .test
+                })
+                .environmentObject(testViewModel)
+            case .test:
+                TestView(onComplete: {
+                    currentScreen = .result
+                }, onCancel: {
+                    currentScreen = .start
+                })
+                .environmentObject(testViewModel)
+            case .result:
+                ResultView(onReturnToStart: {
+                    currentScreen = .start
+                })
+                .environmentObject(testViewModel)
+            }
+        }
+        .navigationTitle("")
+        .navigationBarHidden(true)
+        .alert("検査を開始しますか？", isPresented: $showingConfirmation) {
+            Button("はい") {
+                testViewModel.resetTest() // リセットしてから開始
+                currentScreen = .countdown
+            }
+            Button("いいえ", role: .cancel) {
+                showingConfirmation = false
+            }
+        }
+        .sheet(isPresented: $showingHistory) {
+            HistoryView()
+                .environmentObject(historyViewModel)
+        }
+        .onAppear {
+            Task {
+                await historyViewModel.loadTestResults()
+            }
+        }
+    }
+
+    // MARK: - Start Screen Content
+    private var startScreenContent: some View {
         GeometryReader { geometry in
             VStack(spacing: 0) {
                 headerSection
@@ -32,31 +88,6 @@ struct StartView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color(.systemBackground))
-        }
-        .navigationTitle("")
-        .navigationBarHidden(true)
-        .alert("検査を開始しますか？", isPresented: $showingConfirmation) {
-            Button("はい") {
-                testViewModel.startCountdown()
-                showingCountdown = true
-
-            }
-            Button("いいえ", role: .cancel) {
-                showingConfirmation = false
-            }
-        }
-        .sheet(isPresented: $showingHistory) {
-            HistoryView()
-                .environmentObject(historyViewModel)
-        }
-        .fullScreenCover(isPresented: $showingCountdown) {
-            CountdownView()
-                .environmentObject(testViewModel)
-        }
-        .onAppear {
-            Task {
-                await historyViewModel.loadTestResults()
-            }
         }
     }
 
@@ -138,8 +169,6 @@ struct StartView: View {
         .cornerRadius(16)
         .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
     }
-
-
 
     // MARK: - Button Section
     private var buttonSection: some View {

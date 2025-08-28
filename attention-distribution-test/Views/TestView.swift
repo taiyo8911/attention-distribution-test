@@ -10,7 +10,9 @@ import SwiftUI
 struct TestView: View {
     @EnvironmentObject var testViewModel: TestViewModel
     @State private var showingStopConfirmation = false
-    @Environment(\.dismiss) var dismiss
+
+    let onComplete: () -> Void
+    let onCancel: () -> Void
 
     var body: some View {
         GeometryReader { geometry in
@@ -84,7 +86,13 @@ struct TestView: View {
 
                 // 確認ボタン
                 Button(action: {
-                    testViewModel.confirmSelection()
+                    let completed = testViewModel.confirmSelectionWithResult()
+                    if completed {
+                        // 0.5秒後に結果画面へ
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            onComplete()
+                        }
+                    }
                 }) {
                     Text("確認")
                         .font(.title2)
@@ -103,14 +111,10 @@ struct TestView: View {
         .onAppear {
             testViewModel.startTest()
         }
-        .fullScreenCover(isPresented: $testViewModel.showingResultView) {
-            ResultView()
-                .environmentObject(testViewModel)
-        }
         .alert("検査を中断しますか？", isPresented: $showingStopConfirmation) {
             Button("中断する", role: .destructive) {
                 testViewModel.stopTest()
-                dismiss()
+                onCancel()
             }
             Button("続ける", role: .cancel) { }
         }
@@ -130,6 +134,6 @@ struct TestView: View {
         dataService: MockDataService()
     )
 
-    return TestView()
+    return TestView(onComplete: {}, onCancel: {})
         .environmentObject(testViewModel)
 }

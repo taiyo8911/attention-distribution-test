@@ -10,8 +10,9 @@ import SwiftUI
 struct CountdownView: View {
     @EnvironmentObject var testViewModel: TestViewModel
     @State private var countdownNumber = 3
-    @State private var navigateToTest = false
-    @Environment(\.dismiss) var dismiss
+    @State private var countdownTimer: Timer?
+
+    let onComplete: () -> Void
 
     var body: some View {
         ZStack {
@@ -24,36 +25,35 @@ struct CountdownView: View {
         .onAppear {
             startCountdown()
         }
-        .onReceive(testViewModel.$shouldReturnToStart) { shouldReturn in
-            if shouldReturn {
-                navigateToTest = false
-                dismiss()
-                testViewModel.shouldReturnToStart = false
-            }
-        }
-        .fullScreenCover(isPresented: $navigateToTest) {
-            TestView()
-                .environmentObject(testViewModel)
+        .onDisappear {
+            cleanupTimer()
         }
     }
 
     private func startCountdown() {
-        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
+        countdownTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
             if countdownNumber > 1 {
                 countdownNumber -= 1
             } else {
+                // カウントダウン完了（「1」を1秒間表示してから遷移）
                 timer.invalidate()
+                countdownTimer = nil
 
-                // カウントダウン終了後、TestViewに遷移
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    navigateToTest = true
+                // 1秒後に完了コールバックを呼ぶ
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                    onComplete()
                 }
             }
         }
     }
+
+    private func cleanupTimer() {
+        countdownTimer?.invalidate()
+        countdownTimer = nil
+    }
 }
 
 #Preview {
-    CountdownView()
+    CountdownView(onComplete: {})
         .environmentObject(TestViewModel())
 }

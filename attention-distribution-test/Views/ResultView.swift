@@ -9,7 +9,8 @@ import SwiftUI
 
 struct ResultView: View {
     @EnvironmentObject var testViewModel: TestViewModel
-    @Environment(\.dismiss) var dismiss
+
+    let onReturnToStart: () -> Void
 
     var body: some View {
         VStack(spacing: 50) {
@@ -34,7 +35,7 @@ struct ResultView: View {
 
             // メインへ戻るボタン
             Button("メイン画面へ戻る") {
-                testViewModel.returnToStart()
+                onReturnToStart()
             }
             .font(.title3)
             .foregroundColor(.white)
@@ -62,6 +63,6 @@ struct ResultView: View {
         dataService: MockDataService()
     )
 
-    return ResultView()
+    return ResultView(onReturnToStart: {})
         .environmentObject(testViewModel)
 }

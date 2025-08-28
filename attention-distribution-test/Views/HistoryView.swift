@@ -12,21 +12,19 @@ struct HistoryView: View {
     @Environment(\.dismiss) var dismiss
 
     var body: some View {
-        NavigationView {
-            VStack {
-                if historyViewModel.testResults.isEmpty {
-                    emptyStateView
-                } else {
-                    historyList
-                }
+        VStack {
+            if historyViewModel.testResults.isEmpty {
+                emptyStateView
+            } else {
+                historyList
             }
-            .navigationTitle("履歴")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("戻る") {
-                        dismiss()
-                    }
+        }
+        .navigationTitle("履歴")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button("戻る") {
+                    dismiss()
                 }
             }
         }
@@ -79,6 +77,8 @@ struct HistoryView: View {
 }
 
 #Preview {
-    HistoryView()
-        .environmentObject(HistoryViewModel(dataService: MockDataService(withMockData: true)))
+    NavigationView {
+        HistoryView()
+            .environmentObject(HistoryViewModel(dataService: MockDataService(withMockData: true)))
+    }
 }
