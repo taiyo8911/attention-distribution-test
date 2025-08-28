@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct HistoryView: View {
-    @EnvironmentObject var historyViewModel: HistoryViewModel
-    @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var historyViewModel: HistoryViewModel // 履歴データを管理するViewModel
+    @Environment(\.dismiss) var dismiss // 画面を閉じるための環境変数
 
     var body: some View {
         VStack {
@@ -28,6 +28,7 @@ struct HistoryView: View {
                 }
             }
         }
+        // 画面が表示されたときに履歴データを読み込む
         .onAppear {
             Task {
                 await historyViewModel.loadTestResults()
@@ -35,6 +36,7 @@ struct HistoryView: View {
         }
     }
 
+    // 履歴が無い場合の表示
     private var emptyStateView: some View {
         VStack(spacing: 24) {
             Spacer()
