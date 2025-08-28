@@ -10,7 +10,7 @@ import SwiftUI
 struct ResultView: View {
     @EnvironmentObject var testViewModel: TestViewModel
 
-    let onReturnToStart: () -> Void
+    let onReturnToStart: () -> Void // メイン画面へ戻るコールバック
 
     var body: some View {
         VStack(spacing: 50) {
