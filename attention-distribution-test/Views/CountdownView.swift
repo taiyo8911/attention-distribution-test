@@ -10,31 +10,30 @@ import SwiftUI
 struct CountdownView: View {
     @EnvironmentObject var testViewModel: TestViewModel
     @State private var countdownNumber = 3
-    @State private var showTestView = false
+    @State private var navigateToTest = false
     @Environment(\.dismiss) var dismiss
 
     var body: some View {
         ZStack {
             Color.black.ignoresSafeArea()
 
-            if showTestView {
-                TestView()
-                    .environmentObject(testViewModel)
-            } else {
-                Text("\(countdownNumber)")
-                    .font(.system(size: 120, weight: .bold))
-                    .foregroundColor(.white)
-            }
+            Text("\(countdownNumber)")
+                .font(.system(size: 120, weight: .bold))
+                .foregroundColor(.white)
         }
         .onAppear {
             startCountdown()
         }
         .onReceive(testViewModel.$shouldReturnToStart) { shouldReturn in
             if shouldReturn {
-                showTestView = false
+                navigateToTest = false
                 dismiss()
                 testViewModel.shouldReturnToStart = false
             }
+        }
+        .fullScreenCover(isPresented: $navigateToTest) {
+            TestView()
+                .environmentObject(testViewModel)
         }
     }
 
@@ -45,8 +44,9 @@ struct CountdownView: View {
             } else {
                 timer.invalidate()
 
+                // カウントダウン終了後、TestViewに遷移
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    showTestView = true
+                    navigateToTest = true
                 }
             }
         }
