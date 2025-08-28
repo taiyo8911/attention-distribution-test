@@ -88,6 +88,13 @@ class TestViewModel: ObservableObject {
         }
     }
 
+    func stopTest() {
+        timerService.stop()
+        testModel.resetTest()
+        elapsedTime = 0
+        testStartTime = nil
+    }
+
     // MARK: - Grid Helper Methods
     func getNumber(at row: Int, col: Int) -> Int {
         return testModel.getNumber(at: row, col: col)
