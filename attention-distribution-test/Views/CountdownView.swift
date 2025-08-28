@@ -9,10 +9,10 @@ import SwiftUI
 
 struct CountdownView: View {
     @EnvironmentObject var testViewModel: TestViewModel
-    @State private var countdownNumber = 3
-    @State private var countdownTimer: Timer?
+    @State private var countdownNumber = 3 // カウントダウンの開始数
+    @State private var countdownTimer: Timer? // タイマー用の変数
 
-    let onComplete: () -> Void
+    let onComplete: () -> Void // カウントダウン完了時のコールバック
 
     var body: some View {
         ZStack {
@@ -22,31 +22,35 @@ struct CountdownView: View {
                 .font(.system(size: 120, weight: .bold))
                 .foregroundColor(.white)
         }
+        // 画面表示時にカウントダウン開始
         .onAppear {
             startCountdown()
         }
+        // 画面離脱時にタイマー停止
         .onDisappear {
             cleanupTimer()
         }
     }
 
+    // カウントダウン
     private func startCountdown() {
+        // 1秒ごとに繰り返し
         countdownTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
             if countdownNumber > 1 {
                 countdownNumber -= 1
             } else {
-                // カウントダウン完了（「1」を1秒間表示してから遷移）
-                timer.invalidate()
-                countdownTimer = nil
+                timer.invalidate() // タイマー停止
+                countdownTimer = nil // タイマー変数をクリア
 
-                // 1秒後に完了コールバックを呼ぶ
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                // ユーザーが数字を認識できるように少し待機して完了コールバックを呼び出す
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     onComplete()
                 }
             }
         }
     }
 
+    // タイマーを停止してクリア
     private func cleanupTimer() {
         countdownTimer?.invalidate()
         countdownTimer = nil
