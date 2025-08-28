@@ -29,6 +29,13 @@ struct CountdownView: View {
         .onAppear {
             startCountdown()
         }
+        .onReceive(testViewModel.$shouldReturnToStart) { shouldReturn in
+            if shouldReturn {
+                showTestView = false
+                dismiss()
+                testViewModel.shouldReturnToStart = false
+            }
+        }
     }
 
     private func startCountdown() {

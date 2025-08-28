@@ -36,12 +36,12 @@ struct StartView: View {
         .navigationTitle("")
         .navigationBarHidden(true)
         .alert("検査を開始しますか？", isPresented: $showingConfirmation) {
-            Button("YES") {
+            Button("はい") {
                 testViewModel.startCountdown()
                 showingCountdown = true
 
             }
-            Button("NO", role: .cancel) {
+            Button("いいえ", role: .cancel) {
                 showingConfirmation = false
             }
         }

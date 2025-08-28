@@ -16,6 +16,7 @@ class TestViewModel: ObservableObject {
     @Published private(set) var testModel = TestModel()
     @Published private(set) var elapsedTime: TimeInterval = 0
     @Published var showingResultView = false
+    @Published var shouldReturnToStart = false
 
     // MARK: - Test Timing
     private var testStartTime: Date?
@@ -68,6 +69,15 @@ class TestViewModel: ObservableObject {
         elapsedTime = 0
         showingResultView = false
         testStartTime = nil
+    }
+
+    func returnToStart() {
+        timerService.stop()
+        testModel.resetTest()
+        elapsedTime = 0
+        showingResultView = false
+        testStartTime = nil
+        shouldReturnToStart = true
     }
 
     func tapNumber(at row: Int, col: Int) {

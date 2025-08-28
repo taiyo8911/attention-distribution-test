@@ -34,7 +34,7 @@ struct ResultView: View {
 
             // メインへ戻るボタン
             Button("メイン画面へ戻る") {
-                dismiss()
+                testViewModel.returnToStart()
             }
             .font(.title3)
             .foregroundColor(.white)
