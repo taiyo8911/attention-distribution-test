@@ -20,7 +20,6 @@ struct TestModel {
 
     // MARK: - User Interaction
     private(set) var selectedPosition: GridPosition?
-    private(set) var lastTappedPosition: GridPosition?
     private(set) var showError: Bool = false
 
     // MARK: - Computed Properties
@@ -95,7 +94,6 @@ struct TestModel {
 
         // 数字をタップした時は選択状態のみ設定（正誤判定はしない）
         selectedPosition = GridPosition(row: row, col: col)
-        lastTappedPosition = GridPosition(row: row, col: col)
 
         // エラー状態をクリア（新しい選択をした場合）
         showError = false
@@ -103,6 +101,7 @@ struct TestModel {
         return true
     }
 
+    // 戻り値でテスト完了かどうかを返すバージョン
     mutating func confirmSelection() -> Bool {
         guard let position = selectedPosition else { return false }
         guard gameState == .inProgress else { return false }
