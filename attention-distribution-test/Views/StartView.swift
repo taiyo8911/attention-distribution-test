@@ -19,9 +19,9 @@ struct StartView: View {
     @EnvironmentObject var testViewModel: TestViewModel
     @EnvironmentObject var historyViewModel: HistoryViewModel
 
-    @State private var showingConfirmation = false
-    @State private var showingHistory = false
-    @State private var currentScreen: AppScreenState = .start
+    @State private var showingConfirmation = false // 検査開始確認アラート用の変数
+    @State private var showingHistory = false // 履歴表示用の変数
+    @State private var currentScreen: AppScreenState = .start // 現在の画面状態を管理する変数
 
     var body: some View {
         ZStack {
@@ -104,7 +104,7 @@ struct StartView: View {
                     ))
                     .frame(width: 100, height: 100)
 
-                Image(systemName: "brain.head.profile")
+                Image(systemName: "eye")
                     .font(.system(size: 40, weight: .medium))
                     .foregroundColor(.blue)
             }
@@ -148,7 +148,7 @@ struct StartView: View {
             VStack(alignment: .leading, spacing: 8) {
                 InstructionRow(
                     icon: "grid.circle",
-                    text: "7×7のマスに0〜48の数字がランダムに並んでいます"
+                    text: "マス目に0〜48の数字がランダムに並んでいます"
                 )
                 InstructionRow(
                     icon: "hand.tap",
@@ -156,11 +156,11 @@ struct StartView: View {
                 )
                 InstructionRow(
                     icon: "checkmark.circle",
-                    text: "数字を一つ押すたびに確認ボタンを押してから次へ進んでください"
+                    text: "数字を一つ押すたびに確認ボタンを押してください"
                 )
                 InstructionRow(
                     icon: "timer",
-                    text: "終了するまでの時間を計測します"
+                    text: "最後の数字が押されるまでの時間を計測します"
                 )
             }
         }
