@@ -36,7 +36,6 @@ struct TestView: View {
                 // 次に押す数字
                 if testViewModel.currentNumber <= 48 {
                     Text("\(testViewModel.currentNumber)")
-                    // 文字サイズは大きめにしたい
                         .font(.system(size: 50))
                 } else {
                     Text("")
