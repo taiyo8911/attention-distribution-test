@@ -38,10 +38,6 @@ class HistoryViewModel: ObservableObject {
             testResults = []
         }
     }
-
-    func refresh() async {
-        await loadTestResults()
-    }
 }
 
 // MARK: - Mock History View Model for Preview

@@ -51,12 +51,6 @@ class TestViewModel: ObservableObject {
         timerService.start()
     }
 
-    func stopTest() {
-        timerService.stop()
-        testModel.resetTest()
-        testStartTime = nil
-    }
-
     func resetTest() {
         timerService.reset()
         testModel.resetTest()
@@ -71,7 +65,6 @@ class TestViewModel: ObservableObject {
         print("Tapped (\(row),\(col)): \(tappedNumber), Selected: \(success)")
     }
 
-    // 戻り値でテスト完了かどうかを返すバージョン
     func confirmSelectionWithResult() -> Bool {
         let completed = testModel.confirmSelection()
 
@@ -93,11 +86,6 @@ class TestViewModel: ObservableObject {
             print("Correct! Moving to next number: \(testModel.currentNumber)")
             return false
         }
-    }
-
-    func confirmSelection() {
-        // 既存のメソッドも残しておく（互換性のため）
-        _ = confirmSelectionWithResult()
     }
 
     // MARK: - Grid Helper Methods
