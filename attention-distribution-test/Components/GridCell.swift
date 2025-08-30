@@ -35,7 +35,7 @@ struct GridCell: View {
     }
 
     private var fontSize: CGFloat {
-        cellSize * 0.6
+        cellSize * 0.5
     }
 }
 
