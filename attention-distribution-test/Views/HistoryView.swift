@@ -60,14 +60,12 @@ struct HistoryView: View {
                 HStack {
                     VStack(alignment: .leading, spacing: 4) {
                         Text(result.formattedDate)
-                            .font(.callout)
+                            .monospacedDigit()
                     }
 
                     Spacer()
 
                     Text(result.formattedTime)
-                        .font(.callout)
-                        .fontWeight(.semibold)
                         .foregroundColor(.blue)
                         .monospacedDigit()
                 }
