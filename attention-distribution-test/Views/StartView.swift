@@ -149,20 +149,12 @@ struct StartView: View {
 
             VStack(alignment: .leading, spacing: 8) {
                 InstructionRow(
-                    icon: "grid.circle",
-                    text: "マス目に0〜48の数字がランダムに並んでいます"
-                )
-                InstructionRow(
                     icon: "hand.tap",
-                    text: "0から順番に48まで数字をタップしてください"
+                    text: "0からスタートです"
                 )
                 InstructionRow(
                     icon: "checkmark.circle",
-                    text: "数字を一つ押すたびに確認ボタンを押してください"
-                )
-                InstructionRow(
-                    icon: "timer",
-                    text: "最後の数字が押されるまでの時間を計測します"
+                    text: "数字をタップしたあと、下部の「確認」ボタンを押して進みます"
                 )
             }
         }
