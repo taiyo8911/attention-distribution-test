@@ -60,8 +60,10 @@ struct StartView: View {
             }
         }
         .sheet(isPresented: $showingHistory) {
-            HistoryView()
-                .environmentObject(historyViewModel)
+            NavigationView {
+                HistoryView()
+                    .environmentObject(historyViewModel)
+            }
         }
         .onAppear {
             Task {
