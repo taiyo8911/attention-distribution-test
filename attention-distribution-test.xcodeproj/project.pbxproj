@@ -99,11 +99,12 @@
 				};
 			};
 			buildConfigurationList = DF521BC62E5296EC00102D61 /* Build configuration list for PBXProject "attention-distribution-test" */;
-			developmentRegion = en;
+			developmentRegion = ja;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
+				ja,
 			);
 			mainGroup = DF521BC22E5296EC00102D61;
 			minimizedProjectReferenceProxies = 1;
