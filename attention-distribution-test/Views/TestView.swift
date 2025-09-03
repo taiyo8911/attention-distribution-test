@@ -103,6 +103,7 @@ struct TestView: View {
 
                 Spacer()
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
             .padding()
         }
         .navigationBarHidden(true)
