@@ -40,6 +40,7 @@ struct TestView: View {
             }
             Button("続ける", role: .cancel) { }
         }
+        .dynamicTypeSize(...DynamicTypeSize.accessibility1)
     }
 
     // MARK: - 横向きレイアウト

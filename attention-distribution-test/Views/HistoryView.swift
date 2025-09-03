@@ -34,6 +34,7 @@ struct HistoryView: View {
                 await historyViewModel.loadTestResults()
             }
         }
+        .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
     }
 
     // 履歴が無い場合の表示

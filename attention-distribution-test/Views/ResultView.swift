@@ -48,6 +48,7 @@ struct ResultView: View {
             Spacer()
         }
         .navigationBarHidden(true)
+        .dynamicTypeSize(...DynamicTypeSize.accessibility2)
     }
 
     private var formattedCompletionTime: String {

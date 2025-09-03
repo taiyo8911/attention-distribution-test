@@ -70,6 +70,7 @@ struct StartView: View {
                 await historyViewModel.loadTestResults()
             }
         }
+        .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
     }
 
     // MARK: - Start Screen Content
