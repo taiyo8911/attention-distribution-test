@@ -17,7 +17,7 @@ struct ContentView: View {
                 .environmentObject(testViewModel)
                 .environmentObject(historyViewModel)
         }
-        .navigationViewStyle(StackNavigationViewStyle()) // iPhone/iPad対応
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 
