@@ -6,13 +6,12 @@
 //
 
 import Foundation
-import Combine
 
 // MARK: - Timer Service Protocol
-protocol TimerServiceProtocol {
+protocol TimerServiceProtocol: AnyObject {
     var elapsedTime: TimeInterval { get }
     var isRunning: Bool { get }
-    var elapsedTimePublisher: AnyPublisher<TimeInterval, Never> { get }
+    var elapsedTimeStream: AsyncStream<TimeInterval> { get }
 
     func start()
     func stop()
@@ -20,99 +19,111 @@ protocol TimerServiceProtocol {
 }
 
 // MARK: - Timer Service
-class TimerService: ObservableObject, TimerServiceProtocol {
+final class TimerService: TimerServiceProtocol {
 
-    // MARK: - Published Properties
-    @Published private(set) var elapsedTime: TimeInterval = 0
-    @Published private(set) var isRunning: Bool = false
+    // MARK: - Properties
+    private(set) var elapsedTime: TimeInterval = 0
+    private(set) var isRunning: Bool = false
 
     // MARK: - Private Properties
     private var startTime: Date?
-    private var timer: Timer?
-
-    // MARK: - Publishers
-    var elapsedTimePublisher: AnyPublisher<TimeInterval, Never> {
-        $elapsedTime.eraseToAnyPublisher()
-    }
+    private var timerTask: Task<Void, Never>?
+    private let continuation: AsyncStream<TimeInterval>.Continuation
+    let elapsedTimeStream: AsyncStream<TimeInterval>
 
     // MARK: - Initializer
-    init() {}
+    init() {
+        var continuation: AsyncStream<TimeInterval>.Continuation!
+        self.elapsedTimeStream = AsyncStream { continuation = $0 }
+        self.continuation = continuation
+    }
 
     deinit {
-        cleanupTimer()
+        timerTask?.cancel()
+        continuation.finish()
     }
 
     // MARK: - Public Methods
     func start() {
         guard !isRunning else { return }
 
-        startTime = Date()
+        let startedAt = Date()
+        startTime = startedAt
         isRunning = true
 
-        timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
-            self?.updateElapsedTime()
+        timerTask = Task { [weak self] in
+            while !Task.isCancelled {
+                try? await Task.sleep(for: .milliseconds(100))
+                guard let self, self.isRunning else { return }
+                let elapsed = Date().timeIntervalSince(startedAt)
+                self.elapsedTime = elapsed
+                self.continuation.yield(elapsed)
+            }
         }
-
-        print("Timer started at: \(startTime!)")
     }
 
     func stop() {
         guard isRunning else { return }
 
         isRunning = false
-        cleanupTimer()
-
-        print("Timer stopped. Final time: \(elapsedTime)")
+        timerTask?.cancel()
+        timerTask = nil
     }
 
     func reset() {
-        cleanupTimer()
+        timerTask?.cancel()
+        timerTask = nil
 
         startTime = nil
         elapsedTime = 0
         isRunning = false
-
-        print("Timer reset")
-    }
-
-    // MARK: - Private Methods
-    private func updateElapsedTime() {
-        guard let startTime = startTime, isRunning else { return }
-        elapsedTime = Date().timeIntervalSince(startTime)
-    }
-
-    private func cleanupTimer() {
-        timer?.invalidate()
-        timer = nil
+        continuation.yield(0)
     }
 }
 
 // MARK: - Mock Timer Service (for testing/previews)
-class MockTimerService: TimerServiceProtocol {
-    @Published var elapsedTime: TimeInterval = 0
-    @Published var isRunning: Bool = false
+final class MockTimerService: TimerServiceProtocol {
+    private(set) var elapsedTime: TimeInterval = 0
+    private(set) var isRunning: Bool = false
 
-    var elapsedTimePublisher: AnyPublisher<TimeInterval, Never> {
-        $elapsedTime.eraseToAnyPublisher()
+    private var timerTask: Task<Void, Never>?
+    private let continuation: AsyncStream<TimeInterval>.Continuation
+    let elapsedTimeStream: AsyncStream<TimeInterval>
+
+    init() {
+        var continuation: AsyncStream<TimeInterval>.Continuation!
+        self.elapsedTimeStream = AsyncStream { continuation = $0 }
+        self.continuation = continuation
     }
 
-    private var timer: Timer?
+    deinit {
+        timerTask?.cancel()
+        continuation.finish()
+    }
 
     func start() {
+        guard !isRunning else { return }
         isRunning = true
-        timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
-            self.elapsedTime += 0.1
+
+        timerTask = Task { [weak self] in
+            while !Task.isCancelled {
+                try? await Task.sleep(for: .milliseconds(100))
+                guard let self, self.isRunning else { return }
+                self.elapsedTime += 0.1
+                self.continuation.yield(self.elapsedTime)
+            }
         }
     }
 
     func stop() {
         isRunning = false
-        timer?.invalidate()
-        timer = nil
+        timerTask?.cancel()
+        timerTask = nil
     }
 
     func reset() {
         stop()
         elapsedTime = 0
+        continuation.yield(0)
     }
 }

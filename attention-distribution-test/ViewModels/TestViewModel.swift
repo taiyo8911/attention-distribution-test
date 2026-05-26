@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Combine
 import SwiftUI
 
 // 検査の進行を管理するクラス（ゲームの司会者のような役割）
@@ -23,7 +22,7 @@ class TestViewModel: ObservableObject {
     // MARK: - Dependencies
     private let timerService: TimerServiceProtocol    // 時間を測るサービス
     private let dataService: DataServiceProtocol      // データを保存するサービス
-    private var cancellables = Set<AnyCancellable>()  // タイマーの監視を管理
+    private var timerObservationTask: Task<Void, Never>?  // タイマー監視タスク
 
     // MARK: - Computed Properties
     // 画面で使いやすいように、testModelの情報を取り出す
@@ -44,7 +43,11 @@ class TestViewModel: ObservableObject {
     ) {
         self.timerService = timerService
         self.dataService = dataService
-        setupTimerObservation()  // タイマーの変化を監視する設定
+        observeTimer()  // タイマーの変化を監視する設定
+    }
+
+    deinit {
+        timerObservationTask?.cancel()
     }
 
     // MARK: - Public Methods
@@ -137,10 +140,12 @@ class TestViewModel: ObservableObject {
     }
 
     // タイマーの変化を監視する設定（タイマーが変わったら画面の時間表示も更新される）
-    private func setupTimerObservation() {
-        timerService.elapsedTimePublisher          // タイマーサービスから時間の変化を受け取る
-            .receive(on: DispatchQueue.main)       // メインスレッドで受け取る（画面更新のため）
-            .assign(to: \.elapsedTime, on: self)   // 受け取った時間をelapsedTimeに代入
-            .store(in: &cancellables)              // 監視を続けるための設定
+    private func observeTimer() {
+        let stream = timerService.elapsedTimeStream
+        timerObservationTask = Task { [weak self] in
+            for await time in stream {
+                self?.elapsedTime = time
+            }
+        }
     }
 }
