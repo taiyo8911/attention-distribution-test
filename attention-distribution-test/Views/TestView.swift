@@ -16,15 +16,18 @@ struct TestView: View {
 
     var body: some View {
         GeometryReader { geometry in
-            let screenHeight = geometry.size.height
-            let screenWidth = geometry.size.width
-            let isLandscape = screenWidth > screenHeight
-            let isSmallScreen = screenHeight < 700 // iPhone SE (667) や小さい画面を判定
+            let isLandscape = geometry.size.width > geometry.size.height
+            let isSmallScreen = geometry.size.height < 700 // iPhone SE (667) や小さい画面を判定
 
             if isLandscape {
                 landscapeLayout(geometry: geometry)
             } else {
-                portraitLayout(geometry: geometry, isSmallScreen: isSmallScreen)
+                PortraitTestLayout(
+                    geometry: geometry,
+                    isSmallScreen: isSmallScreen,
+                    onStopTapped: { showingStopConfirmation = true },
+                    onConfirmTapped: confirmAction
+                )
             }
         }
         .toolbar(.hidden, for: .navigationBar)
@@ -43,13 +46,24 @@ struct TestView: View {
         .dynamicTypeSize(...DynamicTypeSize.accessibility1)
     }
 
+    // 確認ボタンタップ時の処理（縦・横レイアウト共通）
+    private func confirmAction() {
+        let completed = testViewModel.confirmSelectionWithResult()
+        if completed {
+            Task {
+                try? await Task.sleep(for: .milliseconds(500))
+                onComplete()
+            }
+        }
+    }
+
     // MARK: - 横向きレイアウト
     private func landscapeLayout(geometry: GeometryProxy) -> some View {
         HStack(spacing: 20) {
             // 左側: コントロールエリア
             VStack(spacing: 4) {
                 // タイマー
-                Text(formattedTime)
+                Text(testViewModel.elapsedTime.formattedTime)
                     .font(.system(size: 24, weight: .bold, design: .monospaced))
                     .monospacedDigit()
 
@@ -98,158 +112,15 @@ struct TestView: View {
                 let totalGridSize = min(availableWidth, availableHeight)
                 let cellSize = (totalGridSize - (gridDimension - 1)) / gridDimension
 
-                gridView(cellSize: cellSize, gridSize: totalGridSize)
+                GridBoard(cellSize: cellSize)
 
-                // 確認ボタン
-                confirmButton(isCompact: false)
+                ConfirmButton(isCompact: false, action: confirmAction)
             }
 
             Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding()
-    }
-
-    // MARK: - 縦向きレイアウト（小画面対応）
-    private func portraitLayout(geometry: GeometryProxy, isSmallScreen: Bool) -> some View {
-        let screenHeight = geometry.size.height
-        let screenWidth = geometry.size.width
-
-        // 小画面用の調整値
-        let timerFontSize: CGFloat = isSmallScreen ? 24 : 32
-        let numberFontSize: CGFloat = isSmallScreen ? 36 : 50
-        let stopButtonHeight: CGFloat = isSmallScreen ? 32 : 40
-        let confirmButtonHeight: CGFloat = isSmallScreen ? 44 : 60
-        let baseSpacing: CGFloat = isSmallScreen ? 6 : 16
-
-        // レイアウト計算
-        let reservedHeight: CGFloat =
-            timerFontSize + 10 + // タイマー
-            stopButtonHeight + baseSpacing + // 中断ボタン
-            numberFontSize + baseSpacing + // 次の数字
-            20 + baseSpacing + // エラーメッセージ領域
-            confirmButtonHeight + baseSpacing + // 確認ボタン
-            60 // 上下余白
-
-        let availableGridHeight = screenHeight - reservedHeight
-        let availableGridWidth = screenWidth - 32 // 左右パディング
-
-        // グリッドサイズの計算（最小サイズを保証）
-        let gridDimension = CGFloat(testViewModel.gridSize)
-        let maxGridSize = min(availableGridWidth, availableGridHeight)
-        let minGridSize: CGFloat = isSmallScreen ? 280 : 320 // 最小グリッドサイズ
-        let totalGridSize = max(minGridSize, maxGridSize)
-        let cellSize = max(35, (totalGridSize - (gridDimension - 1)) / gridDimension) // 最小セルサイズ35px
-
-        return ScrollView(.vertical, showsIndicators: false) {
-            VStack(spacing: baseSpacing) {
-                // タイマー
-                Text(formattedTime)
-                    .font(.system(size: timerFontSize, weight: .bold, design: .monospaced))
-                    .monospacedDigit()
-                    .padding(.top, isSmallScreen ? 8 : 16)
-
-                // 中断ボタン
-                Button("やめる") {
-                    showingStopConfirmation = true
-                }
-                .font(isSmallScreen ? .callout : .title2)
-                .foregroundColor(.white)
-                .frame(width: isSmallScreen ? 80 : 120, height: stopButtonHeight)
-                .background(.red)
-                .cornerRadius(8)
-
-                // 次に押す数字
-                if testViewModel.currentNumber <= testViewModel.targetNumber {
-                    Text("\(testViewModel.currentNumber)")
-                        .font(.system(size: numberFontSize, weight: .semibold))
-                } else {
-                    Text("")
-                        .font(.system(size: numberFontSize))
-                        .frame(height: numberFontSize)
-                }
-
-                // エラーメッセージ
-                Group {
-                    if testViewModel.showError {
-                        Text("正しい数字をタップしてください")
-                            .foregroundColor(.red)
-                            .font(isSmallScreen ? .caption : .subheadline)
-                    } else {
-                        Text("")
-                            .font(isSmallScreen ? .caption : .subheadline)
-                            .frame(height: 16)
-                    }
-                }
-
-                // グリッド
-                gridView(cellSize: cellSize, gridSize: totalGridSize)
-                    .padding(.vertical, baseSpacing)
-
-                // 確認ボタン
-                confirmButton(isCompact: isSmallScreen)
-                    .frame(height: confirmButtonHeight)
-
-                // 下部余白（小画面では少なく）
-                Spacer()
-                    .frame(height: isSmallScreen ? 8 : 16)
-            }
-            .frame(maxWidth: .infinity)
-            .padding(.horizontal, 16)
-        }
-    }
-
-    // MARK: - グリッドビュー
-    private func gridView(cellSize: CGFloat, gridSize: CGFloat) -> some View {
-        let dimension = testViewModel.gridSize
-        let totalSize = cellSize * CGFloat(dimension) + CGFloat(dimension - 1)
-        return VStack(spacing: 1) {
-            ForEach(0..<dimension, id: \.self) { row in
-                HStack(spacing: 1) {
-                    ForEach(0..<dimension, id: \.self) { col in
-                        GridCell(
-                            number: testViewModel.getNumber(at: row, col: col),
-                            isSelected: testViewModel.isSelected(row: row, col: col),
-                            cellSize: cellSize
-                        ) {
-                            testViewModel.tapNumber(at: row, col: col)
-                        }
-                    }
-                }
-            }
-        }
-        .frame(width: totalSize, height: totalSize)
-        .background(Color.clear)
-    }
-
-    // MARK: - 確認ボタン
-    private func confirmButton(isCompact: Bool) -> some View {
-        Button(action: {
-            let completed = testViewModel.confirmSelectionWithResult()
-            if completed {
-                Task {
-                    try? await Task.sleep(for: .milliseconds(500))
-                    onComplete()
-                }
-            }
-        }) {
-            Text("確認")
-                .font(isCompact ? .title3 : .title2)
-                .fontWeight(.semibold)
-                .foregroundColor(.white)
-                .frame(maxWidth: isCompact ? 280 : 400)
-                .frame(height: isCompact ? 44 : 60)
-        }
-        .background(testViewModel.canConfirm ? .blue : .gray)
-        .cornerRadius(isCompact ? 8 : 12)
-        .disabled(!testViewModel.canConfirm)
-    }
-
-    // タイマー用のフォーマットされた時間文字列
-    private var formattedTime: String {
-        let minutes = Int(testViewModel.elapsedTime) / 60
-        let seconds = Int(testViewModel.elapsedTime) % 60
-        return String(format: "%02d:%02d", minutes, seconds)
     }
 }
 
