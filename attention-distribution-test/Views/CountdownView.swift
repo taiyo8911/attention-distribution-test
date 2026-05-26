@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CountdownView: View {
     @EnvironmentObject var testViewModel: TestViewModel
-    @State private var countdownNumber = 3 // カウントダウンの開始数
+    @State private var displayText = "3" // 表示するテキスト（数字または「始め」）
 
     let onComplete: () -> Void // カウントダウン完了時のコールバック
 
@@ -17,7 +17,7 @@ struct CountdownView: View {
         ZStack {
             Color.black.ignoresSafeArea()
 
-            Text("\(countdownNumber)")
+            Text(displayText)
                 .font(.system(size: 120, weight: .bold))
                 .foregroundColor(.white)
         }
@@ -27,17 +27,19 @@ struct CountdownView: View {
         }
     }
 
-    // カウントダウン処理
+    // カウントダウン処理（3→2→1→始め→検査開始）
     private func runCountdown() async {
-        while countdownNumber > 1 {
+        for number in [3, 2, 1] {
+            displayText = "\(number)"
             try? await Task.sleep(for: .seconds(1))
             if Task.isCancelled { return }
-            countdownNumber -= 1
         }
 
-        // 最後の数字を認識できるように少し待機してから完了コールバックを呼ぶ
-        try? await Task.sleep(for: .milliseconds(1100))
+        // 「始め」を表示
+        displayText = "始め"
+        try? await Task.sleep(for: .seconds(1))
         if Task.isCancelled { return }
+
         onComplete()
     }
 }
