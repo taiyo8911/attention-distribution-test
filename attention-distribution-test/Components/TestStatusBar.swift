@@ -7,20 +7,17 @@
 
 import SwiftUI
 
-// タイマー・中断ボタン・現在の数字・エラーメッセージをまとめたステータスバー
+// 中断ボタン・現在の数字・エラーメッセージをまとめたステータスバー
 // 縦・横レイアウトで共通利用する
 struct TestStatusBar: View {
     @EnvironmentObject var testViewModel: TestViewModel
-
-    // タイマー
-    let timerFontSize: CGFloat
-    var timerTopPadding: CGFloat = 0
 
     // 中断ボタン
     let stopButtonWidth: CGFloat
     let stopButtonHeight: CGFloat
     let stopButtonFont: Font
     var stopButtonCornerRadius: CGFloat = 8
+    var stopButtonTopPadding: CGFloat = 0
 
     // 次に押す数字
     let numberFontSize: CGFloat
@@ -36,12 +33,6 @@ struct TestStatusBar: View {
 
     var body: some View {
         Group {
-            // タイマー
-            Text(testViewModel.elapsedTime.formattedTime)
-                .font(.system(size: timerFontSize, weight: .bold, design: .monospaced))
-                .monospacedDigit()
-                .padding(.top, timerTopPadding)
-
             // 中断ボタン
             Button("やめる") {
                 onStopTapped()
@@ -51,6 +42,7 @@ struct TestStatusBar: View {
             .frame(width: stopButtonWidth, height: stopButtonHeight)
             .background(.red)
             .cornerRadius(stopButtonCornerRadius)
+            .padding(.top, stopButtonTopPadding)
 
             // 次に押す数字
             if testViewModel.currentNumber <= testViewModel.targetNumber {

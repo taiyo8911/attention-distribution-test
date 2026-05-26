@@ -22,10 +22,9 @@ struct LandscapeTestLayout: View {
         let cellSize = (totalGridSize - (gridDimension - 1)) / gridDimension
 
         HStack(spacing: 20) {
-            // 左側: ステータスバー（タイマー、中断ボタン、現在の数字、エラーメッセージ）
+            // 左側: ステータスバー（中断ボタン、現在の数字、エラーメッセージ）
             VStack(spacing: 4) {
                 TestStatusBar(
-                    timerFontSize: 24,
                     stopButtonWidth: 100,
                     stopButtonHeight: 40,
                     stopButtonFont: .body,

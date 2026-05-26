@@ -24,13 +24,12 @@ struct PortraitTestLayout: View {
 
         ScrollView(.vertical, showsIndicators: false) {
             VStack(spacing: metrics.baseSpacing) {
-                // タイマー〜エラーメッセージ
+                // 中断ボタン〜エラーメッセージ
                 TestStatusBar(
-                    timerFontSize: metrics.timerFontSize,
-                    timerTopPadding: metrics.topPadding,
                     stopButtonWidth: metrics.stopButtonWidth,
                     stopButtonHeight: metrics.stopButtonHeight,
                     stopButtonFont: isSmallScreen ? .callout : .title2,
+                    stopButtonTopPadding: metrics.topPadding,
                     numberFontSize: metrics.numberFontSize,
                     numberFontWeight: .semibold,
                     numberPlaceholderHeight: metrics.numberFontSize,
@@ -60,7 +59,6 @@ struct PortraitTestLayout: View {
 extension PortraitTestLayout {
     // 縦向きレイアウトのサイズ・余白を一括計算するヘルパー
     struct Metrics {
-        let timerFontSize: CGFloat
         let numberFontSize: CGFloat
         let stopButtonWidth: CGFloat
         let stopButtonHeight: CGFloat
@@ -73,7 +71,6 @@ extension PortraitTestLayout {
 
         init(geometry: GeometryProxy, isSmallScreen: Bool, gridDimension: Int) {
             // 小画面用の調整値
-            self.timerFontSize = isSmallScreen ? 24 : 32
             self.numberFontSize = isSmallScreen ? 36 : 50
             self.stopButtonWidth = isSmallScreen ? 80 : 120
             self.stopButtonHeight = isSmallScreen ? 32 : 40
@@ -84,8 +81,7 @@ extension PortraitTestLayout {
 
             // グリッド以外で確保しておく縦方向のサイズ
             let reservedHeight: CGFloat =
-                timerFontSize + 10 +                              // タイマー
-                stopButtonHeight + baseSpacing +                  // 中断ボタン
+                stopButtonHeight + baseSpacing + topPadding +     // 中断ボタン
                 numberFontSize + baseSpacing +                    // 次の数字
                 20 + baseSpacing +                                // エラーメッセージ領域
                 confirmButtonHeight + baseSpacing +               // 確認ボタン
