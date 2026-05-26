@@ -11,6 +11,7 @@ import Foundation
 protocol DataServiceProtocol {
     func saveTestResult(_ result: TestResult) async throws
     func loadTestResults() async throws -> [TestResult]
+    func deleteAllTestResults() async throws
 }
 
 // MARK: - Local Data Service Implementation
@@ -58,6 +59,10 @@ final class DataService: DataServiceProtocol {
         let results = try decoder.decode([TestResult].self, from: data)
         return results
     }
+
+    func deleteAllTestResults() async throws {
+        userDefaults.removeObject(forKey: Self.testResultsKey)
+    }
 }
 
 // MARK: - Mock Data Service (for testing/previews)
@@ -79,6 +84,10 @@ final class MockDataService: DataServiceProtocol {
 
     func loadTestResults() async throws -> [TestResult] {
         return mockResults
+    }
+
+    func deleteAllTestResults() async throws {
+        mockResults.removeAll()
     }
 
     private func generateMockData() {

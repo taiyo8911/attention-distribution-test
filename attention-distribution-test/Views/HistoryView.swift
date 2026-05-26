@@ -10,6 +10,7 @@ import SwiftUI
 struct HistoryView: View {
     @EnvironmentObject var historyViewModel: HistoryViewModel // 履歴データを管理するViewModel
     @Environment(\.dismiss) var dismiss // 画面を閉じるための環境変数
+    @State private var showingDeleteConfirmation = false // 全削除確認アラート用の変数
 
     var body: some View {
         VStack {
@@ -22,6 +23,16 @@ struct HistoryView: View {
         .navigationTitle("履歴")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
+            // 履歴がある時だけ「全削除」を表示
+            ToolbarItem(placement: .navigationBarLeading) {
+                if !historyViewModel.testResults.isEmpty {
+                    Button("全削除", role: .destructive) {
+                        showingDeleteConfirmation = true
+                    }
+                    .foregroundColor(.red)
+                }
+            }
+
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button("戻る") {
                     dismiss()
@@ -33,6 +44,17 @@ struct HistoryView: View {
             Task {
                 await historyViewModel.loadTestResults()
             }
+        }
+        // 全削除確認アラート
+        .alert("履歴を全て削除しますか？", isPresented: $showingDeleteConfirmation) {
+            Button("削除する", role: .destructive) {
+                Task {
+                    await historyViewModel.deleteAllTestResults()
+                }
+            }
+            Button("キャンセル", role: .cancel) { }
+        } message: {
+            Text("この操作は取り消せません。")
         }
         .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
     }

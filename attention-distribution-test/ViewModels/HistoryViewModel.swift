@@ -38,5 +38,11 @@ class HistoryViewModel: ObservableObject {
             testResults = []
         }
     }
+
+    // 履歴を全件削除する
+    func deleteAllTestResults() async {
+        try? await dataService.deleteAllTestResults()
+        testResults = []
+    }
 }
 
