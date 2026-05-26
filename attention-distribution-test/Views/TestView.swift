@@ -223,7 +223,8 @@ struct TestView: View {
         Button(action: {
             let completed = testViewModel.confirmSelectionWithResult()
             if completed {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                Task {
+                    try? await Task.sleep(for: .milliseconds(500))
                     onComplete()
                 }
             }
