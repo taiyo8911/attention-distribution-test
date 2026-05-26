@@ -53,10 +53,15 @@ class TestViewModel: ObservableObject {
     }
 
     // MARK: - Public Methods
-    // 検査を開始する
+    // 検査を開始する（既に実施中なら何もしない＝再appearに対して冪等）
     func startTest() {
-        testStartTime = Date()      // 開始時刻を記録
-        testModel.startTest()       // TestModelに検査開始を指示
+        guard gameState != .inProgress else { return }
+
+        // 直前の検査の残骸を確実にクリアしてから開始
+        timerService.reset()
+        elapsedTime = 0
+        testStartTime = Date()
+        testModel.startTest()       // TestModelに検査開始を指示（gameStateを.inProgressに）
         timerService.start()        // タイマーを開始
     }
 

@@ -37,7 +37,6 @@ struct StartView: View {
         .toolbar(.hidden, for: .navigationBar)
         .alert("検査を開始しますか？", isPresented: $showingConfirmation) {
             Button("はい") {
-                testViewModel.resetTest() // リセットしてから開始
                 currentScreen = .countdown
             }
             Button("いいえ", role: .cancel) {
