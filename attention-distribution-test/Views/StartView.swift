@@ -76,11 +76,6 @@ struct StartView: View {
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .foregroundColor(.primary)
-
-                Text("運転適正検査")
-                    .font(.title2)
-                    .fontWeight(.medium)
-                    .foregroundColor(.secondary)
             }
         }
         .padding(.top, 60)
@@ -100,7 +95,7 @@ struct StartView: View {
             HStack {
                 Image(systemName: "info.circle.fill")
                     .foregroundColor(.blue)
-                Text("検査について")
+                Text("検査のルール")
                     .font(.headline)
                     .fontWeight(.semibold)
                 Spacer()
@@ -108,12 +103,12 @@ struct StartView: View {
 
             VStack(alignment: .leading, spacing: 8) {
                 InstructionRow(
-                    icon: "hand.tap",
-                    text: "0からスタートです"
+                    icon: "checkmark.circle",
+                    text: "始めに中央の0からスタートし、48までの数字を順番にタップしていきます"
                 )
                 InstructionRow(
                     icon: "checkmark.circle",
-                    text: "数字をタップしたあと、下部の「確認」ボタンを押して進みます"
+                    text: "数字をタップしたらその都度、下部の「確認」ボタンを押して進みます"
                 )
             }
         }
