@@ -70,6 +70,8 @@ struct StartView: View {
                     .foregroundColor(.blue)
             }
 
+            Spacer().frame(height: 10)
+
             // App title
             VStack(spacing: 8) {
                 Text("注意配分検査")
@@ -104,7 +106,11 @@ struct StartView: View {
             VStack(alignment: .leading, spacing: 8) {
                 InstructionRow(
                     icon: "checkmark.circle",
-                    text: "始めに中央の0からスタートし、48までの数字を順番にタップしていきます"
+                    text: "0から48までの数字を順番にタップしていきます"
+                )
+                InstructionRow(
+                    icon: "checkmark.circle",
+                    text: "始めは中央の0からスタートとなります"
                 )
                 InstructionRow(
                     icon: "checkmark.circle",
