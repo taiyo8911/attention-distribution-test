@@ -50,11 +50,6 @@ struct StartView: View {
                     .environmentObject(historyViewModel)
             }
         }
-        .onAppear {
-            Task {
-                await historyViewModel.loadTestResults()
-            }
-        }
         .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
     }
 

@@ -23,11 +23,6 @@ class HistoryViewModel: ObservableObject {
     // HistoryViewModelを作る時の初期設定
     init(dataService: DataServiceProtocol = DataService()) {
         self.dataService = dataService
-
-        // アプリが起動したら自動で過去の結果を読み込む
-        Task {
-            await loadTestResults()
-        }
     }
 
     // MARK: - Public Methods
