@@ -27,7 +27,7 @@ struct ResultView: View {
                     .font(.title2)
                     .foregroundColor(.secondary)
 
-                Text(formattedCompletionTime)
+                Text(testViewModel.elapsedTime.formattedTime)
                     .font(.system(size: 48, weight: .bold, design: .monospaced))
                     .foregroundColor(.blue)
                     .monospacedDigit()
@@ -49,12 +49,6 @@ struct ResultView: View {
         }
         .toolbar(.hidden, for: .navigationBar)
         .dynamicTypeSize(...DynamicTypeSize.accessibility2)
-    }
-
-    private var formattedCompletionTime: String {
-        let minutes = Int(testViewModel.elapsedTime) / 60
-        let seconds = Int(testViewModel.elapsedTime) % 60
-        return String(format: "%02d:%02d", minutes, seconds)
     }
 }
 

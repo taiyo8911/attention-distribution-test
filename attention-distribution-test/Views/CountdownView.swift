@@ -36,9 +36,7 @@ struct CountdownView: View {
         }
 
         // 最後の数字を認識できるように少し待機してから完了コールバックを呼ぶ
-        try? await Task.sleep(for: .seconds(1))
-        if Task.isCancelled { return }
-        try? await Task.sleep(for: .milliseconds(100))
+        try? await Task.sleep(for: .milliseconds(1100))
         if Task.isCancelled { return }
         onComplete()
     }

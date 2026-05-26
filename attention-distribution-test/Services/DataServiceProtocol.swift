@@ -14,7 +14,7 @@ protocol DataServiceProtocol {
 }
 
 // MARK: - Local Data Service Implementation
-class DataService: DataServiceProtocol {
+final class DataService: DataServiceProtocol {
 
     // MARK: - Constants
     private static let testResultsKey = "TestResults"
@@ -48,7 +48,6 @@ class DataService: DataServiceProtocol {
 
         let data = try encoder.encode(results)
         userDefaults.set(data, forKey: Self.testResultsKey)
-        userDefaults.synchronize()
     }
 
     func loadTestResults() async throws -> [TestResult] {
@@ -62,7 +61,7 @@ class DataService: DataServiceProtocol {
 }
 
 // MARK: - Mock Data Service (for testing/previews)
-class MockDataService: DataServiceProtocol {
+final class MockDataService: DataServiceProtocol {
     private var mockResults: [TestResult] = []
 
     init(withMockData: Bool = true) {

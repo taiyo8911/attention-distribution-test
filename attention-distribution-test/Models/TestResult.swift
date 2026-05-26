@@ -42,10 +42,15 @@ extension TestResult: Equatable {
 
 // MARK: - Computed Properties
 extension TestResult {
-    var formattedDate: String {
+    // DateFormatterはコストが高いので共有インスタンスを使う
+    private static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy/MM/dd HH:mm"
-        return formatter.string(from: date)
+        return formatter
+    }()
+
+    var formattedDate: String {
+        return Self.dateFormatter.string(from: date)
     }
 
     var formattedTime: String {
