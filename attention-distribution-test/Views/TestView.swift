@@ -27,7 +27,7 @@ struct TestView: View {
                 portraitLayout(geometry: geometry, isSmallScreen: isSmallScreen)
             }
         }
-        .navigationBarHidden(true)
+        .toolbar(.hidden, for: .navigationBar)
         // 画面表示時に検査開始
         .onAppear {
             testViewModel.startTest()

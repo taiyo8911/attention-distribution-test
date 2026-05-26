@@ -12,12 +12,11 @@ struct ContentView: View {
     @StateObject private var historyViewModel = HistoryViewModel()
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             StartView()
                 .environmentObject(testViewModel)
                 .environmentObject(historyViewModel)
         }
-        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

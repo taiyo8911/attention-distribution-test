@@ -73,12 +73,12 @@ struct HistoryView: View {
                 .padding(.vertical, 8)
             }
         }
-        .listStyle(PlainListStyle())
+        .listStyle(.plain)
     }
 }
 
 #Preview {
-    NavigationView {
+    NavigationStack {
         HistoryView()
             .environmentObject(HistoryViewModel(dataService: MockDataService(withMockData: true)))
     }

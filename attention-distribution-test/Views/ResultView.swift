@@ -47,7 +47,7 @@ struct ResultView: View {
 
             Spacer()
         }
-        .navigationBarHidden(true)
+        .toolbar(.hidden, for: .navigationBar)
         .dynamicTypeSize(...DynamicTypeSize.accessibility2)
     }
 

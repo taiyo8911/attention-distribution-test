@@ -49,7 +49,7 @@ struct StartView: View {
             }
         }
         .navigationTitle("")
-        .navigationBarHidden(true)
+        .toolbar(.hidden, for: .navigationBar)
         .alert("検査を開始しますか？", isPresented: $showingConfirmation) {
             Button("はい") {
                 testViewModel.resetTest() // リセットしてから開始
@@ -60,7 +60,7 @@ struct StartView: View {
             }
         }
         .sheet(isPresented: $showingHistory) {
-            NavigationView {
+            NavigationStack {
                 HistoryView()
                     .environmentObject(historyViewModel)
             }
@@ -221,7 +221,9 @@ struct InstructionRow: View {
 }
 
 #Preview {
-    StartView()
-        .environmentObject(TestViewModel())
-        .environmentObject(HistoryViewModel())
+    NavigationStack {
+        StartView()
+            .environmentObject(TestViewModel())
+            .environmentObject(HistoryViewModel())
+    }
 }
