@@ -53,7 +53,7 @@ final class TimerService: TimerServiceProtocol {
 
         timerTask = Task { [weak self] in
             while !Task.isCancelled {
-                try? await Task.sleep(for: .milliseconds(100))
+                try? await Task.sleep(for: .seconds(1))
                 guard let self, self.isRunning else { return }
                 let elapsed = Date().timeIntervalSince(startedAt)
                 self.elapsedTime = elapsed
@@ -64,6 +64,13 @@ final class TimerService: TimerServiceProtocol {
 
     func stop() {
         guard isRunning else { return }
+
+        // 停止時に最終的な経過時間を精度高く反映する（次のtickを待たずに済む）
+        if let startedAt = startTime {
+            let elapsed = Date().timeIntervalSince(startedAt)
+            elapsedTime = elapsed
+            continuation.yield(elapsed)
+        }
 
         isRunning = false
         timerTask?.cancel()
@@ -107,9 +114,9 @@ final class MockTimerService: TimerServiceProtocol {
 
         timerTask = Task { [weak self] in
             while !Task.isCancelled {
-                try? await Task.sleep(for: .milliseconds(100))
+                try? await Task.sleep(for: .seconds(1))
                 guard let self, self.isRunning else { return }
-                self.elapsedTime += 0.1
+                self.elapsedTime += 1
                 self.continuation.yield(self.elapsedTime)
             }
         }
