@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct TestView: View {
     @EnvironmentObject var testViewModel: TestViewModel
@@ -53,6 +54,12 @@ struct TestView: View {
     // 確認ボタンタップ時の処理（縦・横レイアウト共通）
     private func confirmAction() {
         let completed = testViewModel.confirmSelectionWithResult()
+
+        // 誤答時はハプティックフィードバック
+        if testViewModel.showError {
+            UINotificationFeedbackGenerator().notificationOccurred(.error)
+        }
+
         if completed {
             Task {
                 try? await Task.sleep(for: .milliseconds(500))
