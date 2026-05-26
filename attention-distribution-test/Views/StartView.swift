@@ -7,46 +7,31 @@
 
 import SwiftUI
 
-// 画面の状態を管理する列挙型
-enum AppScreenState {
-    case start
-    case countdown
-    case test
-    case result
-}
-
 struct StartView: View {
     @EnvironmentObject var testViewModel: TestViewModel
     @EnvironmentObject var historyViewModel: HistoryViewModel
+    @Binding var currentScreen: AppScreenState
 
     @State private var showingConfirmation = false // 検査開始確認アラート用の変数
     @State private var showingHistory = false // 履歴表示用の変数
-    @State private var currentScreen: AppScreenState = .start // 現在の画面状態を管理する変数
 
     var body: some View {
-        ZStack {
-            // 現在の画面に応じて表示を切り替え
-            switch currentScreen {
-            case .start:
-                startScreenContent
-            case .countdown:
-                CountdownView(onComplete: {
-                    currentScreen = .test
-                })
-                .environmentObject(testViewModel)
-            case .test:
-                TestView(onComplete: {
-                    currentScreen = .result
-                }, onCancel: {
-                    currentScreen = .start
-                })
-                .environmentObject(testViewModel)
-            case .result:
-                ResultView(onReturnToStart: {
-                    currentScreen = .start
-                })
-                .environmentObject(testViewModel)
+        GeometryReader { geometry in
+            VStack(spacing: 0) {
+                headerSection
+
+                Spacer()
+
+                mainContent
+
+                Spacer()
+
+                buttonSection
+
+                Spacer()
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color(.systemBackground))
         }
         .navigationTitle("")
         .toolbar(.hidden, for: .navigationBar)
@@ -71,27 +56,6 @@ struct StartView: View {
             }
         }
         .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
-    }
-
-    // MARK: - Start Screen Content
-    private var startScreenContent: some View {
-        GeometryReader { geometry in
-            VStack(spacing: 0) {
-                headerSection
-
-                Spacer()
-
-                mainContent
-
-                Spacer()
-
-                buttonSection
-
-                Spacer()
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color(.systemBackground))
-        }
     }
 
     // MARK: - Header Section
@@ -222,7 +186,7 @@ struct InstructionRow: View {
 
 #Preview {
     NavigationStack {
-        StartView()
+        StartView(currentScreen: .constant(.start))
             .environmentObject(TestViewModel())
             .environmentObject(HistoryViewModel())
     }
