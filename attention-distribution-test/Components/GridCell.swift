@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct GridCell: View {
-    let number: Int
+    let number: Int?
     let isSelected: Bool
     let cellSize: CGFloat
     let action: () -> Void
@@ -24,12 +24,14 @@ struct GridCell: View {
                             .stroke(Color.black, lineWidth: strokeWidth)
                     )
 
-                // 数字表示
-                Text("\(number)")
-                    .font(.system(size: fontSize, weight: fontWeight))
-                    .foregroundColor(.black)
-                    .minimumScaleFactor(0.7) // 小画面で文字が収まらない場合のスケールファクター
-                    .lineLimit(1)
+                // 数字表示（範囲外などでnilのときは空表示）
+                if let number {
+                    Text("\(number)")
+                        .font(.system(size: fontSize, weight: fontWeight))
+                        .foregroundColor(.black)
+                        .minimumScaleFactor(0.7) // 小画面で文字が収まらない場合のスケールファクター
+                        .lineLimit(1)
+                }
             }
         }
         .frame(width: cellSize, height: cellSize)

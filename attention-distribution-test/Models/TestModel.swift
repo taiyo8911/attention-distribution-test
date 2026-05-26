@@ -39,38 +39,37 @@ struct TestModel {
     // MARK: - Grid Management
     // マス目に数字をランダムに配置する（ゲーム開始時に呼ばれる）
     mutating func generateGrid() {
-        // 7x7の空のマス目を作る（全部0で埋める）
+        // 空のマス目を作る（全部0で埋める）
         gridNumbers = Array(repeating: Array(repeating: 0, count: gridSize), count: gridSize)
 
-        // 真ん中のマス目（3,3）に必ず0を置く
-        gridNumbers[3][3] = 0
+        // 真ん中のマス目に必ず0を置く
+        let centerIndex = gridSize / 2
+        gridNumbers[centerIndex][centerIndex] = 0
 
-        // 1から48までの数字をバラバラに並び替える
-        var numbers = Array(1...48)
+        // 1からtargetNumberまでの数字をバラバラに並び替える
+        var numbers = Array(1...targetNumber)
         numbers.shuffle()
 
         // 真ん中以外のマス目に数字を順番に配置していく
-        var index = 0  // 配置する数字のインデックス
-        for row in 0..<7 {      // 縦のマス目（0から6まで）
-            for col in 0..<7 {  // 横のマス目（0から6まで）
-                if row != 3 || col != 3 { // 真ん中以外の場合
-                    gridNumbers[row][col] = numbers[index]  // 数字を配置
-                    index += 1  // 次の数字へ
+        var index = 0
+        for row in 0..<gridSize {
+            for col in 0..<gridSize {
+                if row != centerIndex || col != centerIndex {
+                    gridNumbers[row][col] = numbers[index]
+                    index += 1
                 }
             }
         }
     }
 
-    // 指定した位置のマス目の数字を取得する
-    func getNumber(at row: Int, col: Int) -> Int {
-        // マス目の範囲をチェック（0〜6の間か、配列が空じゃないか）
-        guard row >= 0, row < 7, col >= 0, col < 7,
-              !gridNumbers.isEmpty,
+    // 指定した位置のマス目の数字を取得する（範囲外や未生成ならnil）
+    func getNumber(at row: Int, col: Int) -> Int? {
+        guard row >= 0, row < gridSize, col >= 0, col < gridSize,
               row < gridNumbers.count,
               col < gridNumbers[row].count else {
-            return -1  // 範囲外なら-1を返す
+            return nil
         }
-        return gridNumbers[row][col]  // その位置の数字を返す
+        return gridNumbers[row][col]
     }
 
     // MARK: - Game State Management
@@ -116,8 +115,7 @@ struct TestModel {
     mutating func confirmSelection() -> Bool {
         guard let position = selectedPosition else { return false }    // マス目が選ばれてなければ何もしない
         guard gameState == .inProgress else { return false }          // ゲーム中じゃなければ何もしない
-
-        let selectedNumber = getNumber(at: position.row, col: position.col)  // 選んだマス目の数字を取得
+        guard let selectedNumber = getNumber(at: position.row, col: position.col) else { return false }  // 範囲外なら何もしない
 
         if selectedNumber == currentNumber {
             // 正解の場合の処理

@@ -28,6 +28,8 @@ class TestViewModel: ObservableObject {
     // 画面で使いやすいように、testModelの情報を取り出す
     var gameState: GameState { testModel.gameState }      // ゲームの状態
     var currentNumber: Int { testModel.currentNumber }    // 今押すべき数字
+    var targetNumber: Int { testModel.targetNumber }      // 最後に押す数字
+    var gridSize: Int { testModel.gridSize }              // マス目のサイズ
     var showError: Bool { testModel.showError }           // エラーを表示するかどうか
 
     // 確認ボタンを押せるかどうか（マス目を選んでて、エラーがなくて、ゲーム中の時だけ）
@@ -69,9 +71,7 @@ class TestViewModel: ObservableObject {
     // ユーザーがマス目をタップした時の処理
     func tapNumber(at row: Int, col: Int) {
         // TestModelにタップを伝える（選択状態にするだけ）
-        let success = testModel.tapNumber(at: row, col: col)
-        let tappedNumber = testModel.getNumber(at: row, col: col)
-        print("Tapped (\(row),\(col)): \(tappedNumber), Selected: \(success)")  // デバッグ用
+        _ = testModel.tapNumber(at: row, col: col)
     }
 
     // 確認ボタンを押した時の処理
@@ -110,7 +110,7 @@ class TestViewModel: ObservableObject {
 
     // MARK: - Grid Helper Methods
     // 指定した位置のマス目の数字を取得（画面表示用）
-    func getNumber(at row: Int, col: Int) -> Int {
+    func getNumber(at row: Int, col: Int) -> Int? {
         return testModel.getNumber(at: row, col: col)
     }
 

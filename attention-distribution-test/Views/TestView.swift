@@ -64,7 +64,7 @@ struct TestView: View {
                 .cornerRadius(12)
 
                 // 次に押す数字
-                if testViewModel.currentNumber <= 48 {
+                if testViewModel.currentNumber <= testViewModel.targetNumber {
                     Text("\(testViewModel.currentNumber)")
                         .font(.system(size: 36))
                 } else {
@@ -92,12 +92,13 @@ struct TestView: View {
 
             // 右側: グリッドエリア + 確認ボタン
             VStack(spacing: 10) {
+                let gridDimension = CGFloat(testViewModel.gridSize)
                 let availableWidth = geometry.size.width - 160 - 60
                 let availableHeight = geometry.size.height - 100
-                let gridSize = min(availableWidth, availableHeight)
-                let cellSize = (gridSize - 6) / 7
+                let totalGridSize = min(availableWidth, availableHeight)
+                let cellSize = (totalGridSize - (gridDimension - 1)) / gridDimension
 
-                gridView(cellSize: cellSize, gridSize: gridSize)
+                gridView(cellSize: cellSize, gridSize: totalGridSize)
 
                 // 確認ボタン
                 confirmButton(isCompact: false)
@@ -134,10 +135,11 @@ struct TestView: View {
         let availableGridWidth = screenWidth - 32 // 左右パディング
 
         // グリッドサイズの計算（最小サイズを保証）
+        let gridDimension = CGFloat(testViewModel.gridSize)
         let maxGridSize = min(availableGridWidth, availableGridHeight)
         let minGridSize: CGFloat = isSmallScreen ? 280 : 320 // 最小グリッドサイズ
-        let gridSize = max(minGridSize, maxGridSize)
-        let cellSize = max(35, (gridSize - 6) / 7) // 最小セルサイズ35px
+        let totalGridSize = max(minGridSize, maxGridSize)
+        let cellSize = max(35, (totalGridSize - (gridDimension - 1)) / gridDimension) // 最小セルサイズ35px
 
         return ScrollView(.vertical, showsIndicators: false) {
             VStack(spacing: baseSpacing) {
@@ -158,7 +160,7 @@ struct TestView: View {
                 .cornerRadius(8)
 
                 // 次に押す数字
-                if testViewModel.currentNumber <= 48 {
+                if testViewModel.currentNumber <= testViewModel.targetNumber {
                     Text("\(testViewModel.currentNumber)")
                         .font(.system(size: numberFontSize, weight: .semibold))
                 } else {
@@ -180,8 +182,8 @@ struct TestView: View {
                     }
                 }
 
-                // 7x7グリッド
-                gridView(cellSize: cellSize, gridSize: gridSize)
+                // グリッド
+                gridView(cellSize: cellSize, gridSize: totalGridSize)
                     .padding(.vertical, baseSpacing)
 
                 // 確認ボタン
@@ -199,10 +201,12 @@ struct TestView: View {
 
     // MARK: - グリッドビュー
     private func gridView(cellSize: CGFloat, gridSize: CGFloat) -> some View {
-        VStack(spacing: 1) {
-            ForEach(0..<7, id: \.self) { row in
+        let dimension = testViewModel.gridSize
+        let totalSize = cellSize * CGFloat(dimension) + CGFloat(dimension - 1)
+        return VStack(spacing: 1) {
+            ForEach(0..<dimension, id: \.self) { row in
                 HStack(spacing: 1) {
-                    ForEach(0..<7, id: \.self) { col in
+                    ForEach(0..<dimension, id: \.self) { col in
                         GridCell(
                             number: testViewModel.getNumber(at: row, col: col),
                             isSelected: testViewModel.isSelected(row: row, col: col),
@@ -214,7 +218,7 @@ struct TestView: View {
                 }
             }
         }
-        .frame(width: cellSize * 7 + 6, height: cellSize * 7 + 6)
+        .frame(width: totalSize, height: totalSize)
         .background(Color.clear)
     }
 
