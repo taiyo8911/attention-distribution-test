@@ -26,7 +26,6 @@ struct TestStatusBar: View {
 
     // エラーメッセージ
     let errorFont: Font
-    var errorPlaceholderHeight: CGFloat = 16
 
     // アクション
     let onStopTapped: () -> Void
@@ -60,17 +59,13 @@ struct TestStatusBar: View {
                     .frame(height: numberPlaceholderHeight)
             }
 
-            // エラーメッセージ
-            if testViewModel.showError {
-                Text("正しい数字をタップしてください")
-                    .foregroundColor(.red)
-                    .font(errorFont)
-                    .multilineTextAlignment(.center)
-            } else {
-                Text("")
-                    .font(errorFont)
-                    .frame(height: errorPlaceholderHeight)
-            }
+            // エラーメッセージ（領域は常に確保し、表示/非表示はopacityで切り替えてレイアウトシフトを防ぐ）
+            Text("正しい数字をタップしてください")
+                .foregroundColor(.red)
+                .font(errorFont)
+                .multilineTextAlignment(.center)
+                .opacity(testViewModel.showError ? 1 : 0)
+                .accessibilityHidden(!testViewModel.showError)
         }
     }
 }

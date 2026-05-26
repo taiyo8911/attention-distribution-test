@@ -32,7 +32,6 @@ struct LandscapeTestLayout: View {
                     numberFontSize: 36,
                     numberPlaceholderHeight: 40,
                     errorFont: .caption,
-                    errorPlaceholderHeight: 15,
                     onStopTapped: onStopTapped
                 )
 
