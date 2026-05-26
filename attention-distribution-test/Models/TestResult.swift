@@ -40,12 +40,6 @@ extension TestResult: Equatable {
     }
 }
 
-extension TestResult: Comparable {
-    static func < (lhs: TestResult, rhs: TestResult) -> Bool {
-        return lhs.completionTime < rhs.completionTime
-    }
-}
-
 // MARK: - Computed Properties
 extension TestResult {
     var formattedDate: String {

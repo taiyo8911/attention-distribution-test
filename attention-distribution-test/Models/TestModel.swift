@@ -23,12 +23,6 @@ struct TestModel {
     private(set) var selectedPosition: GridPosition?         // 今選んでるマス目の位置
     private(set) var showError: Bool = false                 // 間違えた時にエラーを表示するかどうか
 
-    // MARK: - Computed Properties
-    // 全部の数字を押し終わったかどうかをチェック
-    var isComplete: Bool {
-        return currentNumber > targetNumber  // 49（48の次）になったら完了
-    }
-
     // MARK: - Initializer
     // 最初にTestModelを作る時の設定
     init() {
@@ -91,11 +85,6 @@ struct TestModel {
         gridNumbers = []            // マス目を空にする
     }
 
-    // 検査を完了状態にする
-    mutating func completeTest() {
-        gameState = .completed       // 状態を「完了」に変更
-    }
-
     // MARK: - User Interaction
     // ユーザーがマス目をタップした時の処理
     mutating func tapNumber(at row: Int, col: Int) -> Bool {
@@ -125,7 +114,7 @@ struct TestModel {
 
             // 全部終わったかチェック
             if currentNumber > targetNumber {  // 48を超えたら
-                completeTest()               // 検査完了にする
+                gameState = .completed       // 検査完了にする
                 return true                  // 「終わったよ」を返す
             }
             return false  // 「まだ続くよ」を返す

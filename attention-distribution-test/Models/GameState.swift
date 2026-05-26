@@ -13,5 +13,4 @@ enum GameState {
     case notStarted
     case inProgress
     case completed
-    case cancelled
 }
