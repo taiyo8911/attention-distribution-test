@@ -49,8 +49,6 @@ class DataService: DataServiceProtocol {
         let data = try encoder.encode(results)
         userDefaults.set(data, forKey: Self.testResultsKey)
         userDefaults.synchronize()
-
-        print("Test result saved. Total results: \(results.count)")
     }
 
     func loadTestResults() async throws -> [TestResult] {
@@ -59,7 +57,6 @@ class DataService: DataServiceProtocol {
         }
 
         let results = try decoder.decode([TestResult].self, from: data)
-        print("Loaded \(results.count) test results")
         return results
     }
 }

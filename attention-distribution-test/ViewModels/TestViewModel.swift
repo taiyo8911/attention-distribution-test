@@ -81,8 +81,7 @@ class TestViewModel: ObservableObject {
 
         if testModel.showError {
             // 間違えた場合
-            print("Incorrect selection.")  // デバッグ用
-            return false  // まだ続く
+            return false
         } else if completed {
             // 全部終わった場合
             timerService.stop()  // タイマーを止める
@@ -92,11 +91,10 @@ class TestViewModel: ObservableObject {
                 await saveTestResult()
             }
 
-            return true  // 終わったよ
+            return true
         } else {
             // 正解で次に進む場合
-            print("Correct! Moving to next number: \(testModel.currentNumber)")  // デバッグ用
-            return false  // まだ続く
+            return false
         }
     }
 
@@ -132,11 +130,7 @@ class TestViewModel: ObservableObject {
             completionTime: elapsedTime  // かかった時間
         )
 
-        do {
-            try await dataService.saveTestResult(result)  // DataServiceで保存
-        } catch {
-            print("Failed to save result: \(error)")     // 保存に失敗した場合のエラー表示
-        }
+        try? await dataService.saveTestResult(result)
     }
 
     // タイマーの変化を監視する設定（タイマーが変わったら画面の時間表示も更新される）

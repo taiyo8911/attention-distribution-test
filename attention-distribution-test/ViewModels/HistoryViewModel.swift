@@ -33,21 +33,10 @@ class HistoryViewModel: ObservableObject {
             let results = try await dataService.loadTestResults()
             // 新しい順番に並び替える（一番最近やったものが上に来る）
             testResults = results.sorted { $0.date > $1.date }
-            print("Loaded \(results.count) test results")  // デバッグ用：何件読み込めたか表示
         } catch {
-            // 読み込みに失敗した場合の処理
-            print("Failed to load test results: \(error)")  // エラー内容を表示
-            testResults = []  // 空のリストにする
+            // 読み込みに失敗した場合は空にする
+            testResults = []
         }
     }
 }
 
-// MARK: - Mock History View Model for Preview
-// プレビュー用のテスト版HistoryViewModel（実際のアプリでは使わない）
-#if DEBUG
-class MockHistoryViewModel: HistoryViewModel {
-    override init(dataService: DataServiceProtocol = MockDataService()) {
-        super.init(dataService: dataService)  // テスト用のデータサービスを使う
-    }
-}
-#endif
