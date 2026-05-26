@@ -13,10 +13,11 @@ struct HistoryView: View {
     @State private var showingDeleteConfirmation = false // 全削除確認アラート用の変数
 
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             if historyViewModel.testResults.isEmpty {
                 emptyStateView
             } else {
+                statisticsSection
                 historyList
             }
         }
@@ -96,6 +97,68 @@ struct HistoryView: View {
             }
         }
         .listStyle(.plain)
+    }
+
+    // MARK: - 統計セクション
+    private var statisticsSection: some View {
+        HStack(spacing: 12) {
+            StatisticItem(
+                title: "実施回数",
+                value: "\(historyViewModel.testCount)",
+                unit: "回"
+            )
+
+            Divider()
+                .frame(height: 40)
+
+            StatisticItem(
+                title: "自己ベスト",
+                value: historyViewModel.bestTime?.formattedTime ?? "--:--",
+                unit: nil
+            )
+
+            Divider()
+                .frame(height: 40)
+
+            StatisticItem(
+                title: "平均タイム",
+                value: historyViewModel.averageTime?.formattedTime ?? "--:--",
+                unit: nil
+            )
+        }
+        .padding(.vertical, 16)
+        .padding(.horizontal, 12)
+        .background(Color(.secondarySystemBackground))
+    }
+}
+
+// MARK: - 統計項目1つ分
+private struct StatisticItem: View {
+    let title: String
+    let value: String
+    let unit: String?
+
+    var body: some View {
+        VStack(spacing: 4) {
+            Text(title)
+                .font(.caption)
+                .foregroundColor(.secondary)
+
+            HStack(alignment: .lastTextBaseline, spacing: 2) {
+                Text(value)
+                    .font(.title3)
+                    .fontWeight(.semibold)
+                    .foregroundColor(.primary)
+                    .monospacedDigit()
+
+                if let unit {
+                    Text(unit)
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+            }
+        }
+        .frame(maxWidth: .infinity)
     }
 }
 

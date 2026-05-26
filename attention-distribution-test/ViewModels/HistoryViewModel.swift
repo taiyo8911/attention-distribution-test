@@ -19,6 +19,24 @@ class HistoryViewModel: ObservableObject {
     // MARK: - Dependencies
     let dataService: DataServiceProtocol  // データを保存・読み込みするサービス
 
+    // MARK: - Statistics
+    // 実施回数
+    var testCount: Int {
+        testResults.count
+    }
+
+    // 自己ベスト（最短完了時間）
+    var bestTime: TimeInterval? {
+        testResults.map(\.completionTime).min()
+    }
+
+    // 平均タイム
+    var averageTime: TimeInterval? {
+        guard !testResults.isEmpty else { return nil }
+        let total = testResults.reduce(0) { $0 + $1.completionTime }
+        return total / Double(testResults.count)
+    }
+
     // MARK: - Initializer
     // HistoryViewModelを作る時の初期設定
     init(dataService: DataServiceProtocol = DataService()) {
