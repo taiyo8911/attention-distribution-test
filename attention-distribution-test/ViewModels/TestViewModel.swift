@@ -111,6 +111,11 @@ class TestViewModel: ObservableObject {
         testStartTime = nil        // 開始時刻をクリア
     }
 
+    // ScenePhaseがactiveに復帰した時など、経過時間を即座に再同期する
+    func refreshTimer() {
+        timerService.refresh()
+    }
+
     // MARK: - Grid Helper Methods
     // 指定した位置のマス目の数字を取得（画面表示用）
     func getNumber(at row: Int, col: Int) -> Int? {

@@ -10,6 +10,7 @@ import UIKit
 
 struct TestView: View {
     @EnvironmentObject var testViewModel: TestViewModel
+    @Environment(\.scenePhase) private var scenePhase // バックグラウンド復帰を検知
     @State private var showingStopConfirmation = false // 中断確認アラート用の変数
 
     let onComplete: () -> Void // 検査完了時のコールバック
@@ -39,6 +40,12 @@ struct TestView: View {
         // 画面表示時に検査開始
         .onAppear {
             testViewModel.startTest()
+        }
+        // バックグラウンド復帰時にタイマーを即座に同期
+        .onChange(of: scenePhase) { newPhase in
+            if newPhase == .active {
+                testViewModel.refreshTimer()
+            }
         }
         // やめるボタン押下時の確認アラート
         .alert("検査を中断しますか？", isPresented: $showingStopConfirmation) {

@@ -16,6 +16,7 @@ protocol TimerServiceProtocol: AnyObject {
     func start()
     func stop()
     func reset()
+    func refresh()  // 即座に経過時間を再計算する（ScenePhase 復帰時など）
 }
 
 // MARK: - Timer Service
@@ -86,6 +87,15 @@ final class TimerService: TimerServiceProtocol {
         isRunning = false
         continuation.yield(0)
     }
+
+    // 経過時間を即座に再計算して通知する
+    // ScenePhaseがbackground→activeに変わった直後など、次のtickを待たず最新値を反映したい場面で使う
+    func refresh() {
+        guard isRunning, let startedAt = startTime else { return }
+        let elapsed = Date().timeIntervalSince(startedAt)
+        elapsedTime = elapsed
+        continuation.yield(elapsed)
+    }
 }
 
 // MARK: - Mock Timer Service (for testing/previews)
@@ -132,5 +142,10 @@ final class MockTimerService: TimerServiceProtocol {
         stop()
         elapsedTime = 0
         continuation.yield(0)
+    }
+
+    // Mockは内部インクリメント方式なので、現在値を再通知するだけ
+    func refresh() {
+        continuation.yield(elapsedTime)
     }
 }
