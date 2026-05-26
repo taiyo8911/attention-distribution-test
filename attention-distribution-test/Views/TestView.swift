@@ -20,7 +20,11 @@ struct TestView: View {
             let isSmallScreen = geometry.size.height < 700 // iPhone SE (667) や小さい画面を判定
 
             if isLandscape {
-                landscapeLayout(geometry: geometry)
+                LandscapeTestLayout(
+                    geometry: geometry,
+                    onStopTapped: { showingStopConfirmation = true },
+                    onConfirmTapped: confirmAction
+                )
             } else {
                 PortraitTestLayout(
                     geometry: geometry,
@@ -55,72 +59,6 @@ struct TestView: View {
                 onComplete()
             }
         }
-    }
-
-    // MARK: - 横向きレイアウト
-    private func landscapeLayout(geometry: GeometryProxy) -> some View {
-        HStack(spacing: 20) {
-            // 左側: コントロールエリア
-            VStack(spacing: 4) {
-                // タイマー
-                Text(testViewModel.elapsedTime.formattedTime)
-                    .font(.system(size: 24, weight: .bold, design: .monospaced))
-                    .monospacedDigit()
-
-                // 中断ボタン
-                Button("やめる") {
-                    showingStopConfirmation = true
-                }
-                .font(.body)
-                .foregroundColor(.white)
-                .frame(width: 100, height: 40)
-                .background(.red)
-                .cornerRadius(12)
-
-                // 次に押す数字
-                if testViewModel.currentNumber <= testViewModel.targetNumber {
-                    Text("\(testViewModel.currentNumber)")
-                        .font(.system(size: 36))
-                } else {
-                    Text("")
-                        .font(.system(size: 36))
-                        .frame(height: 40)
-                }
-
-                // エラーメッセージ
-                if testViewModel.showError {
-                    Text("正しい数字をタップしてください")
-                        .foregroundColor(.red)
-                        .font(.caption)
-                        .multilineTextAlignment(.center)
-                } else {
-                    Text("")
-                        .font(.caption)
-                        .frame(height: 15)
-                }
-
-                Spacer()
-            }
-            .frame(width: 160)
-            .padding(.vertical)
-
-            // 右側: グリッドエリア + 確認ボタン
-            VStack(spacing: 10) {
-                let gridDimension = CGFloat(testViewModel.gridSize)
-                let availableWidth = geometry.size.width - 160 - 60
-                let availableHeight = geometry.size.height - 100
-                let totalGridSize = min(availableWidth, availableHeight)
-                let cellSize = (totalGridSize - (gridDimension - 1)) / gridDimension
-
-                GridBoard(cellSize: cellSize)
-
-                ConfirmButton(isCompact: false, action: confirmAction)
-            }
-
-            Spacer()
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .padding()
     }
 }
 

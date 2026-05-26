@@ -24,44 +24,19 @@ struct PortraitTestLayout: View {
 
         ScrollView(.vertical, showsIndicators: false) {
             VStack(spacing: metrics.baseSpacing) {
-                // タイマー
-                Text(testViewModel.elapsedTime.formattedTime)
-                    .font(.system(size: metrics.timerFontSize, weight: .bold, design: .monospaced))
-                    .monospacedDigit()
-                    .padding(.top, metrics.topPadding)
-
-                // 中断ボタン
-                Button("やめる") {
-                    onStopTapped()
-                }
-                .font(isSmallScreen ? .callout : .title2)
-                .foregroundColor(.white)
-                .frame(width: metrics.stopButtonWidth, height: metrics.stopButtonHeight)
-                .background(.red)
-                .cornerRadius(8)
-
-                // 次に押す数字
-                if testViewModel.currentNumber <= testViewModel.targetNumber {
-                    Text("\(testViewModel.currentNumber)")
-                        .font(.system(size: metrics.numberFontSize, weight: .semibold))
-                } else {
-                    Text("")
-                        .font(.system(size: metrics.numberFontSize))
-                        .frame(height: metrics.numberFontSize)
-                }
-
-                // エラーメッセージ
-                Group {
-                    if testViewModel.showError {
-                        Text("正しい数字をタップしてください")
-                            .foregroundColor(.red)
-                            .font(isSmallScreen ? .caption : .subheadline)
-                    } else {
-                        Text("")
-                            .font(isSmallScreen ? .caption : .subheadline)
-                            .frame(height: 16)
-                    }
-                }
+                // タイマー〜エラーメッセージ
+                TestStatusBar(
+                    timerFontSize: metrics.timerFontSize,
+                    timerTopPadding: metrics.topPadding,
+                    stopButtonWidth: metrics.stopButtonWidth,
+                    stopButtonHeight: metrics.stopButtonHeight,
+                    stopButtonFont: isSmallScreen ? .callout : .title2,
+                    numberFontSize: metrics.numberFontSize,
+                    numberFontWeight: .semibold,
+                    numberPlaceholderHeight: metrics.numberFontSize,
+                    errorFont: isSmallScreen ? .caption : .subheadline,
+                    onStopTapped: onStopTapped
+                )
 
                 // グリッド
                 GridBoard(cellSize: metrics.cellSize)
