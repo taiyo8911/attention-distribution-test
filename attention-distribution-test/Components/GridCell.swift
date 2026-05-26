@@ -16,19 +16,19 @@ struct GridCell: View {
     var body: some View {
         Button(action: action) {
             ZStack {
-                // 白背景
+                // セル背景（選択時は黄色、通常時はセマンティックな背景色）
                 Rectangle()
-                    .fill(isSelected ? Color.yellow.opacity(0.7) : Color.white)
+                    .fill(isSelected ? Color.yellow.opacity(0.7) : Color(.secondarySystemBackground))
                     .overlay(
                         Rectangle()
-                            .stroke(Color.black, lineWidth: strokeWidth)
+                            .stroke(Color.primary, lineWidth: strokeWidth)
                     )
 
                 // 数字表示（範囲外などでnilのときは空表示）
                 if let number {
                     Text("\(number)")
                         .font(.system(size: fontSize, weight: fontWeight))
-                        .foregroundColor(.black)
+                        .foregroundColor(isSelected ? .black : .primary)
                         .minimumScaleFactor(0.7) // 小画面で文字が収まらない場合のスケールファクター
                         .lineLimit(1)
                 }

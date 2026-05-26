@@ -119,9 +119,9 @@ struct StartView: View {
             }
         }
         .padding(20)
-        .background(Color(.systemBackground))
+        .background(Color(.secondarySystemBackground))
         .cornerRadius(16)
-        .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
+        .shadow(color: Color.primary.opacity(0.1), radius: 8, x: 0, y: 4)
     }
 
     // MARK: - Button Section
