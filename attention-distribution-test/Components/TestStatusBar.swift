@@ -46,8 +46,14 @@ struct TestStatusBar: View {
 
             // 次に押す数字
             if testViewModel.currentNumber <= testViewModel.targetNumber {
-                Text("\(testViewModel.currentNumber)")
-                    .font(.system(size: numberFontSize, weight: numberFontWeight))
+                HStack(alignment: .firstTextBaseline, spacing: 4) {
+                    Text("次に押す数字→")
+                        .font(.title2)
+                    Text("\(testViewModel.currentNumber)")
+                        .font(.system(size: numberFontSize, weight: numberFontWeight))
+                }
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
             } else {
                 Text("")
                     .font(.system(size: numberFontSize))
