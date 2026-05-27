@@ -15,6 +15,7 @@ class TestViewModel: ObservableObject {
     // MARK: - Published Properties
     @Published private(set) var testModel = TestModel()        // 検査のデータ（マス目の数字や現在の状態）
     @Published private(set) var elapsedTime: TimeInterval = 0  // 経過時間（何秒たったか）
+    @Published private(set) var isPersonalBest: Bool = false   // 今回の結果が自己ベスト更新かどうか
 
     // MARK: - Test Timing
     private var testStartTime: Date?  // 検査を始めた時刻を記録
@@ -60,6 +61,7 @@ class TestViewModel: ObservableObject {
         // 直前の検査の残骸を確実にクリアしてから開始
         timerService.reset()
         elapsedTime = 0
+        isPersonalBest = false      // 自己ベストフラグもリセット
         testStartTime = Date()
         testModel.startTest()       // TestModelに検査開始を指示（gameStateを.inProgressに）
         timerService.start()        // タイマーを開始
@@ -132,6 +134,13 @@ class TestViewModel: ObservableObject {
     // 検査結果をファイルに保存する
     private func saveTestResult() async {
         guard let startTime = testStartTime else { return }  // 開始時刻がなければ何もしない
+
+        // 保存前の履歴と比較して自己ベスト更新かどうかを判定
+        let existingResults = (try? await dataService.loadTestResults()) ?? []
+        if let previousBest = existingResults.map(\.completionTime).min(),
+           elapsedTime < previousBest {
+            isPersonalBest = true
+        }
 
         // 結果データを作成
         let result = TestResult(
