@@ -8,34 +8,47 @@
 
 ## 2. アーキテクチャ・ファイル構成
 
-### 2.1 フォルダ構成
+### 2.1 フォルダ構成（最新版）
 ```
 attention-distribution-test/
-├── attention_distribution_testApp.swift (メインアプリファイル)
+├── attention_distribution_testApp.swift
 ├── Views/
 │   ├── ContentView.swift (メインナビゲーション管理)
 │   ├── StartView.swift (スタート画面 + 開始確認ダイアログ)
 │   ├── CountdownView.swift (カウントダウン画面)
 │   ├── TestView.swift (メイン検査画面 + 中断確認ダイアログ)
+│   ├── PortraitTestLayout.swift (検査画面ポートレイトレイアウト)
+│   ├── LandscapeTestLayout.swift (検査画面ランドスケープレイアウト)
 │   ├── ResultView.swift (結果画面)
 │   └── HistoryView.swift (履歴画面)
 ├── Components/
 │   ├── GridCell.swift (7x7グリッドのセル)
-│   └── TimerView.swift (タイマー表示コンポーネント)
+│   ├── GridBoard.swift (グリッドボード全体)
+│   ├── ConfirmButton.swift (確認ボタン)
+│   └── TestStatusBar.swift (タイマー・ステータスバー)
 ├── Models/
 │   ├── TestModel.swift (検査の状態管理)
 │   ├── TestResult.swift (検査結果データ)
-│   └── GameState.swift (ゲーム状態の列挙型)
+│   ├── GameState.swift (ゲーム状態の列挙型)
+│   ├── AppScreenState.swift (画面状態の列挙型)
+│   └── TestAdvice.swift (検査アドバイス情報)
 ├── ViewModels/
 │   ├── TestViewModel.swift (メイン検査のビジネスロジック)
 │   └── HistoryViewModel.swift (履歴管理)
 ├── Services/
 │   ├── DataServiceProtocol.swift (データ保存・読み込みサービス)
 │   └── TimerServiceProtocol.swift (時間計測サービス)
-└── Assets.xcassets/ (アプリアイコン、色設定など)
-    ├── Contents.json
-    ├── AccentColor.colorset/
-    └── AppIcon.appiconset/
+├── Assets.xcassets/
+│   ├── Contents.json
+│   ├── AccentColor.colorset/
+│   └── AppIcon.appiconset/
+├── Preview Content/
+│   └── Preview Assets.xcassets/
+├── Info.plist
+├── InfoPlist.xcstrings
+├── Localizable.xcstrings
+└── attention-distribution-test.xcodeproj
+
 ```
 
 ### 2.2 アーキテクチャパターン
@@ -220,6 +233,12 @@ attention-distribution-test/
 - .completed（完了）
 - .cancelled（中断）
 
+#### AppScreenState
+- 画面遷移状態の管理
+
+#### TestAdvice
+- 検査アドバイス情報の管理
+
 ### 6.2 データ保存
 - **方法**: UserDefaults（DataServiceで管理）
 - **保存先**: ローカルストレージ
@@ -240,6 +259,7 @@ attention-distribution-test/
 - **セルサイズ**: 利用可能領域に基づいて計算
 - **フォントサイズ**: セルサイズの60%に設定
 - **ナビゲーション**: StackNavigationViewStyleでiPhone/iPad対応
+- **向き対応**: PortraitTestLayout/LandscapeTestLayoutで縦横対応
 
 ### 7.3 パフォーマンス要件
 - **応答性**: タップ反応は即座に処理
