@@ -14,13 +14,24 @@ struct ResultView: View {
     let onReturnToStart: () -> Void // メイン画面へ戻るコールバック
 
     var body: some View {
-        VStack(spacing: 30) {
+        VStack(spacing: 24) {
             Spacer()
 
-            // タイトル
-            Text("検査終了")
-                .font(.largeTitle)
-                .fontWeight(.bold)
+            // タイトルとねぎらいメッセージ
+            VStack(spacing: 8) {
+                Text("検査終了")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+
+                Text("お疲れさまでした")
+                    .font(.title3)
+                    .foregroundColor(.secondary)
+            }
+
+            // 自己ベスト更新バッジ
+            if testViewModel.isPersonalBest {
+                personalBestBadge
+            }
 
             // 完了時間
             VStack(spacing: 8) {
@@ -39,8 +50,8 @@ struct ResultView: View {
 
             Spacer()
 
-            // メインへ戻るボタン
-            Button("メイン画面へ戻る") {
+            // もう一度挑戦ボタン
+            Button("もう一度挑戦") {
                 onReturnToStart()
             }
             .font(.title3)
@@ -50,8 +61,6 @@ struct ResultView: View {
             .background(.blue)
             .cornerRadius(12)
             .padding(.horizontal, 20)
-
-            Spacer()
         }
         .toolbar(.hidden, for: .navigationBar)
         .onAppear {
@@ -59,6 +68,24 @@ struct ResultView: View {
             advice = TestAdvice.random()
         }
         .dynamicTypeSize(...DynamicTypeSize.accessibility2)
+    }
+
+    // MARK: - 自己ベスト更新バッジ
+    private var personalBestBadge: some View {
+        HStack(spacing: 6) {
+            Image(systemName: "star.fill")
+                .foregroundColor(.yellow)
+            Text("自己ベスト更新！")
+                .font(.headline)
+                .fontWeight(.bold)
+                .foregroundColor(.orange)
+            Image(systemName: "star.fill")
+                .foregroundColor(.yellow)
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 8)
+        .background(Color.yellow.opacity(0.15))
+        .cornerRadius(20)
     }
 
     // MARK: - ワンポイントアドバイスカード
