@@ -50,6 +50,8 @@ struct ResultView: View {
             .background(.blue)
             .cornerRadius(12)
             .padding(.horizontal, 20)
+
+            Spacer()
         }
         .toolbar(.hidden, for: .navigationBar)
         .onAppear {
