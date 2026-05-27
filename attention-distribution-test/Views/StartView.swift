@@ -15,24 +15,28 @@ struct StartView: View {
     @State private var showingConfirmation = false // 検査開始確認アラート用の変数
     @State private var showingHistory = false // 履歴表示用の変数
 
+    // MARK: - Layout Constants
+    // 画面の上下マージンと、セクション間の最小スペーシングを定数化
+    private let topMargin: CGFloat = 40
+    private let bottomMargin: CGFloat = 32
+    private let horizontalMargin: CGFloat = 24
+
     var body: some View {
-        GeometryReader { geometry in
-            VStack(spacing: 0) {
-                headerSection
+        VStack(spacing: 0) {
+            headerSection
 
-                Spacer()
+            Spacer(minLength: 24)
 
-                mainContent
+            mainContent
 
-                Spacer()
+            Spacer(minLength: 24)
 
-                buttonSection
-
-                Spacer()
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color(.systemBackground))
+            buttonSection
         }
+        .padding(.top, topMargin)
+        .padding(.bottom, bottomMargin)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color(.systemBackground))
         .navigationTitle("")
         .toolbar(.hidden, for: .navigationBar)
         .alert("検査を開始しますか？", isPresented: $showingConfirmation) {
@@ -54,7 +58,7 @@ struct StartView: View {
 
     // MARK: - Header Section
     private var headerSection: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 24) {
             // App icon area
             ZStack {
                 Circle()
@@ -70,17 +74,12 @@ struct StartView: View {
                     .foregroundColor(.blue)
             }
 
-            Spacer().frame(height: 10)
-
             // App title
-            VStack(spacing: 8) {
-                Text("注意配分検査")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                    .foregroundColor(.primary)
-            }
+            Text("注意配分検査")
+                .font(.largeTitle)
+                .fontWeight(.bold)
+                .foregroundColor(.primary)
         }
-        .padding(.top, 60)
     }
 
     // MARK: - Main Content
@@ -89,7 +88,7 @@ struct StartView: View {
             // Instructions card
             instructionCard
         }
-        .padding(.horizontal, 24)
+        .padding(.horizontal, horizontalMargin)
     }
 
     private var instructionCard: some View {
@@ -154,7 +153,7 @@ struct StartView: View {
                     .cornerRadius(12)
             }
         }
-        .padding(.horizontal, 24)
+        .padding(.horizontal, horizontalMargin)
     }
 }
 
