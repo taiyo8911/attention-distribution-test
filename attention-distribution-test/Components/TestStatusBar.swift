@@ -33,7 +33,7 @@ struct TestStatusBar: View {
     var body: some View {
         Group {
             // 中断ボタン
-            Button("やめる") {
+            Button("中断") {
                 onStopTapped()
             }
             .font(stopButtonFont)

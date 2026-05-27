@@ -36,10 +36,10 @@ struct StartView: View {
         .navigationTitle("")
         .toolbar(.hidden, for: .navigationBar)
         .alert("検査を開始しますか？", isPresented: $showingConfirmation) {
-            Button("はい") {
+            Button("開始する") {
                 currentScreen = .countdown
             }
-            Button("いいえ", role: .cancel) {
+            Button("キャンセル", role: .cancel) {
                 showingConfirmation = false
             }
         }
