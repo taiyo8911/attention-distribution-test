@@ -36,7 +36,7 @@ struct CountdownView: View {
         }
 
         // 「始め」を表示
-        displayText = "始め"
+        displayText = String(localized: "Go!")
         try? await Task.sleep(for: .seconds(1))
         if Task.isCancelled { return }
 

@@ -1,0 +1,573 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "" : {
+
+    },
+    "%lld" : {
+
+    },
+    "A little practice each day steadily improves your attention skills." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "毎日少しずつ続けることで、注意配分の力が着実に伸びます"
+          }
+        }
+      }
+    },
+    "After tapping a number, press the Confirm button to proceed." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "数字をタップしたらその都度、下部の「確認」ボタンを押して進みます"
+          }
+        }
+      }
+    },
+    "Attempts" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "実施回数"
+          }
+        }
+      }
+    },
+    "Attention Distribution Test" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "注意配分検査"
+          }
+        }
+      }
+    },
+    "Attention drops when you are tired. Take a break before trying again." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "疲れている時は注意力が低下します。休憩を挟んでから挑戦しましょう"
+          }
+        }
+      }
+    },
+    "Average" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "平均タイム"
+          }
+        }
+      }
+    },
+    "Back" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "戻る"
+          }
+        }
+      }
+    },
+    "Back to Home" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "メイン画面へ戻る"
+          }
+        }
+      }
+    },
+    "Best Time" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自己ベスト"
+          }
+        }
+      }
+    },
+    "Cancel" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "キャンセル"
+          }
+        }
+      }
+    },
+    "Close your eyes briefly before the test to reset your focus." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "検査前に目を閉じて視覚をリセットすると、集中力が高まります"
+          }
+        }
+      }
+    },
+    "Completion Time" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完了時間"
+          }
+        }
+      }
+    },
+    "Confirm" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "確認"
+          }
+        }
+      }
+    },
+    "Continue" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "続ける"
+          }
+        }
+      }
+    },
+    "Delete" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "削除する"
+          }
+        }
+      }
+    },
+    "Delete All" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全削除"
+          }
+        }
+      }
+    },
+    "Delete all history?" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "履歴を全て削除しますか？"
+          }
+        }
+      }
+    },
+    "Go!" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "始め"
+          }
+        }
+      }
+    },
+    "History" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "履歴"
+          }
+        }
+      }
+    },
+    "How It Works" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "検査のルール"
+          }
+        }
+      }
+    },
+    "If you cannot find a number after a while, scan vertically and horizontally." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ある程度の時間探して見つからない時は縦・横に目線を移して探しましょう"
+          }
+        }
+      }
+    },
+    "If you make a mistake, take a deep breath before continuing." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "間違えても焦らず、深呼吸してから再開しましょう"
+          }
+        }
+      }
+    },
+    "Make sure your hand or stylus does not cover the grid." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "手やペン先で隠れてしまわないように注意しましょう"
+          }
+        }
+      }
+    },
+    "New Personal Best!" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自己ベスト更新！"
+          }
+        }
+      }
+    },
+    "Next →" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "次に押す数字→"
+          }
+        }
+      }
+    },
+    "No history yet" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "履歴はありません"
+          }
+        }
+      }
+    },
+    "Please tap the correct number." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正しい数字をタップしてください"
+          }
+        }
+      }
+    },
+    "Prioritize unscanned areas over re-checking the same spots." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "同じ場所を何度も見るより、まだ見ていないエリアを優先して探しましょう"
+          }
+        }
+      }
+    },
+    "Relax your shoulders and stay calm." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "肩の力を抜いてリラックスしましょう"
+          }
+        }
+      }
+    },
+    "Scan the whole grid rather than fixating on one spot." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "視線を1点に集中せず、全体を見渡す感覚で探しましょう"
+          }
+        }
+      }
+    },
+    "Spotting the next number ahead of time makes the search more efficient." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "先の数字を見つけておくことで、効率的に探せます"
+          }
+        }
+      }
+    },
+    "Start" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "開始する"
+          }
+        }
+      }
+    },
+    "Start from the 0 at the center." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "始めは中央の0からスタートとなります"
+          }
+        }
+      }
+    },
+    "Start Test" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "検査開始"
+          }
+        }
+      }
+    },
+    "Start the test?" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "検査を開始しますか？"
+          }
+        }
+      }
+    },
+    "Stay calm." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "落ち着いて。"
+          }
+        }
+      }
+    },
+    "Stop" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "中断"
+          }
+        }
+      }
+    },
+    "Stop the test?" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "検査を中断しますか？"
+          }
+        }
+      }
+    },
+    "Taking in a wide area at once matters more than moving your eyes quickly." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "視線を素早く動かすより、広い範囲を一度に見る意識が大切です"
+          }
+        }
+      }
+    },
+    "Tap numbers from 0 to 48 in order." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "0から48までの数字を順番にタップしていきます"
+          }
+        }
+      }
+    },
+    "Tension narrows your field of vision. Take a deep breath before starting." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "緊張すると視野が狭くなります。検査前に深呼吸して"
+          }
+        }
+      }
+    },
+    "Test Complete" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "検査終了"
+          }
+        }
+      }
+    },
+    "The next number may be right next to the last one." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "数字がすぐ近くにあることも"
+          }
+        }
+      }
+    },
+    "This action cannot be undone." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "この操作は取り消せません。"
+          }
+        }
+      }
+    },
+    "Tip" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ワンポイントアドバイス"
+          }
+        }
+      }
+    },
+    "Try Again" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "もう一度挑戦"
+          }
+        }
+      }
+    },
+    "Try scanning outward from the center in a radial pattern." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "中央から放射状に視線を広げる探し方も有効です"
+          }
+        }
+      }
+    },
+    "Well done!" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "お疲れさまでした"
+          }
+        }
+      }
+    },
+    "When your score plateaus, prioritize accuracy over speed." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "スコアが伸びない時こそ、急がず正確さを優先しましょう"
+          }
+        }
+      }
+    },
+    "With practice, your eye movement becomes more efficient and your time improves." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "練習を重ねると目線の移動が効率化され、タイムが自然と縮みます"
+          }
+        }
+      }
+    },
+    "You do not need to memorize the layout. Calmly search one number at a time." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "数字の配置を覚える必要はありません。冷静に1つずつ探しましょう"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

@@ -21,13 +21,13 @@ struct HistoryView: View {
                 historyList
             }
         }
-        .navigationTitle("履歴")
+        .navigationTitle("History")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             // 履歴がある時だけ「全削除」を表示
             ToolbarItem(placement: .navigationBarLeading) {
                 if !historyViewModel.testResults.isEmpty {
-                    Button("全削除", role: .destructive) {
+                    Button("Delete All", role: .destructive) {
                         showingDeleteConfirmation = true
                     }
                     .foregroundColor(.red)
@@ -35,7 +35,7 @@ struct HistoryView: View {
             }
 
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button("戻る") {
+                Button("Back") {
                     dismiss()
                 }
             }
@@ -47,15 +47,15 @@ struct HistoryView: View {
             }
         }
         // 全削除確認アラート
-        .alert("履歴を全て削除しますか？", isPresented: $showingDeleteConfirmation) {
-            Button("削除する", role: .destructive) {
+        .alert("Delete all history?", isPresented: $showingDeleteConfirmation) {
+            Button("Delete", role: .destructive) {
                 Task {
                     await historyViewModel.deleteAllTestResults()
                 }
             }
-            Button("キャンセル", role: .cancel) { }
+            Button("Cancel", role: .cancel) { }
         } message: {
-            Text("この操作は取り消せません。")
+            Text("This action cannot be undone.")
         }
         .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
     }
@@ -69,7 +69,7 @@ struct HistoryView: View {
                 .font(.system(size: 64))
                 .foregroundColor(.gray)
 
-            Text("履歴はありません")
+            Text("No history yet")
                 .font(.title2)
                 .fontWeight(.semibold)
                 .foregroundColor(.primary)
@@ -103,16 +103,16 @@ struct HistoryView: View {
     private var statisticsSection: some View {
         HStack(spacing: 12) {
             StatisticItem(
-                title: "実施回数",
+                title: "Attempts",
                 value: "\(historyViewModel.testCount)",
-                unit: "回"
+                unit: nil
             )
 
             Divider()
                 .frame(height: 40)
 
             StatisticItem(
-                title: "自己ベスト",
+                title: "Best Time",
                 value: historyViewModel.bestTime?.formattedTime ?? "--:--",
                 unit: nil
             )
@@ -121,7 +121,7 @@ struct HistoryView: View {
                 .frame(height: 40)
 
             StatisticItem(
-                title: "平均タイム",
+                title: "Average",
                 value: historyViewModel.averageTime?.formattedTime ?? "--:--",
                 unit: nil
             )
@@ -134,7 +134,7 @@ struct HistoryView: View {
 
 // MARK: - 統計項目1つ分
 private struct StatisticItem: View {
-    let title: String
+    let title: LocalizedStringKey
     let value: String
     let unit: String?
 

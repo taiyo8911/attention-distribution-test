@@ -20,11 +20,11 @@ struct ResultView: View {
 
             // タイトルとねぎらいメッセージ
             VStack(spacing: 8) {
-                Text("検査終了")
+                Text("Test Complete")
                     .font(.largeTitle)
                     .fontWeight(.bold)
 
-                Text("お疲れさまでした")
+                Text("Well done!")
                     .font(.title3)
                     .foregroundColor(.secondary)
             }
@@ -36,7 +36,7 @@ struct ResultView: View {
 
             // 完了時間
             VStack(spacing: 8) {
-                Text("完了時間")
+                Text("Completion Time")
                     .font(.title2)
                     .foregroundColor(.secondary)
 
@@ -54,7 +54,7 @@ struct ResultView: View {
             // アクションボタン
             VStack(spacing: 12) {
                 // もう一度挑戦ボタン（主アクション）
-                Button("もう一度挑戦") {
+                Button("Try Again") {
                     onRestart()
                 }
                 .font(.title3)
@@ -65,7 +65,7 @@ struct ResultView: View {
                 .cornerRadius(12)
 
                 // メイン画面へ戻るボタン（副アクション）
-                Button("メイン画面へ戻る") {
+                Button("Back to Home") {
                     onReturnToStart()
                 }
                 .font(.title3)
@@ -90,7 +90,7 @@ struct ResultView: View {
         HStack(spacing: 6) {
             Image(systemName: "star.fill")
                 .foregroundColor(.yellow)
-            Text("自己ベスト更新！")
+            Text("New Personal Best!")
                 .font(.headline)
                 .fontWeight(.bold)
                 .foregroundColor(.orange)
@@ -109,7 +109,7 @@ struct ResultView: View {
             HStack(spacing: 8) {
                 Image(systemName: "lightbulb.fill")
                     .foregroundColor(.yellow)
-                Text("ワンポイントアドバイス")
+                Text("Tip")
                     .font(.headline)
                     .foregroundColor(.primary)
             }

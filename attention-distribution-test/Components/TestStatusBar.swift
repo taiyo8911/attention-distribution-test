@@ -33,7 +33,7 @@ struct TestStatusBar: View {
     var body: some View {
         Group {
             // 中断ボタン
-            Button("中断") {
+            Button("Stop") {
                 onStopTapped()
             }
             .font(stopButtonFont)
@@ -46,7 +46,7 @@ struct TestStatusBar: View {
             // 次に押す数字
             if testViewModel.currentNumber <= testViewModel.targetNumber {
                 HStack(alignment: .firstTextBaseline, spacing: 4) {
-                    Text("次に押す数字→")
+                    Text("Next →")
                         .font(.title2)
                     Text("\(testViewModel.currentNumber)")
                         .font(.system(size: numberFontSize, weight: numberFontWeight))
@@ -60,7 +60,7 @@ struct TestStatusBar: View {
             }
 
             // エラーメッセージ（領域は常に確保し、表示/非表示はopacityで切り替えてレイアウトシフトを防ぐ）
-            Text("正しい数字をタップしてください")
+            Text("Please tap the correct number.")
                 .foregroundColor(.red)
                 .font(errorFont)
                 .multilineTextAlignment(.center)

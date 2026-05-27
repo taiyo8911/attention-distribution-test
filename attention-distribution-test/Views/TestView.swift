@@ -48,12 +48,12 @@ struct TestView: View {
             }
         }
         // やめるボタン押下時の確認アラート
-        .alert("検査を中断しますか？", isPresented: $showingStopConfirmation) {
-            Button("中断する", role: .destructive) {
+        .alert("Stop the test?", isPresented: $showingStopConfirmation) {
+            Button("Stop", role: .destructive) {
                 testViewModel.stopTest()
                 onCancel()
             }
-            Button("続ける", role: .cancel) { }
+            Button("Continue", role: .cancel) { }
         }
         .dynamicTypeSize(...DynamicTypeSize.accessibility1)
     }

@@ -15,7 +15,7 @@ struct ConfirmButton: View {
 
     var body: some View {
         Button(action: action) {
-            Text("確認")
+            Text("Confirm")
                 .font(isCompact ? .title3 : .title2)
                 .fontWeight(.semibold)
                 .foregroundColor(.white)

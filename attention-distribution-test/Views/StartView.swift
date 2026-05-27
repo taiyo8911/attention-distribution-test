@@ -39,11 +39,11 @@ struct StartView: View {
         .background(Color(.systemBackground))
         .navigationTitle("")
         .toolbar(.hidden, for: .navigationBar)
-        .alert("検査を開始しますか？", isPresented: $showingConfirmation) {
-            Button("開始する") {
+        .alert("Start the test?", isPresented: $showingConfirmation) {
+            Button("Start") {
                 currentScreen = .countdown
             }
-            Button("キャンセル", role: .cancel) {
+            Button("Cancel", role: .cancel) {
                 showingConfirmation = false
             }
         }
@@ -75,7 +75,7 @@ struct StartView: View {
             }
 
             // App title
-            Text("注意配分検査")
+            Text("Attention Distribution Test")
                 .font(.largeTitle)
                 .fontWeight(.bold)
                 .foregroundColor(.primary)
@@ -96,7 +96,7 @@ struct StartView: View {
             HStack {
                 Image(systemName: "info.circle.fill")
                     .foregroundColor(.blue)
-                Text("検査のルール")
+                Text("How It Works")
                     .font(.headline)
                     .fontWeight(.semibold)
                 Spacer()
@@ -105,15 +105,15 @@ struct StartView: View {
             VStack(alignment: .leading, spacing: 8) {
                 InstructionRow(
                     icon: "checkmark.circle",
-                    text: "0から48までの数字を順番にタップしていきます"
+                    text: "Tap numbers from 0 to 48 in order."
                 )
                 InstructionRow(
                     icon: "checkmark.circle",
-                    text: "始めは中央の0からスタートとなります"
+                    text: "Start from the 0 at the center."
                 )
                 InstructionRow(
                     icon: "checkmark.circle",
-                    text: "数字をタップしたらその都度、下部の「確認」ボタンを押して進みます"
+                    text: "After tapping a number, press the Confirm button to proceed."
                 )
             }
         }
@@ -130,7 +130,7 @@ struct StartView: View {
             Button(action: {
                 showingConfirmation = true
             }) {
-                Text("検査開始")
+                Text("Start Test")
                     .font(.title2)
                     .fontWeight(.semibold)
                     .foregroundColor(.white)
@@ -144,7 +144,7 @@ struct StartView: View {
             Button(action: {
                 showingHistory = true
             }) {
-                Text("履歴確認")
+                Text("History")
                     .font(.title2)
                     .foregroundColor(.blue)
                     .frame(maxWidth: .infinity)
@@ -160,7 +160,7 @@ struct StartView: View {
 // MARK: - Supporting Views
 struct InstructionRow: View {
     let icon: String
-    let text: String
+    let text: LocalizedStringKey
 
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
