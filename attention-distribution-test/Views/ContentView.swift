@@ -24,11 +24,11 @@ struct ContentView: View {
                     }
                 case .test:
                     TestView(onComplete: {
-                        currentScreen = .result
+                        currentScreen = .finished
                     }, onCancel: {
                         currentScreen = .start
                     })
-                case .result:
+                case .finished:
                     ResultView {
                         currentScreen = .start
                     }

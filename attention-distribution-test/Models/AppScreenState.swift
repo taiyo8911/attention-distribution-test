@@ -12,5 +12,5 @@ enum AppScreenState {
     case start
     case countdown
     case test
-    case result
+    case finished
 }
