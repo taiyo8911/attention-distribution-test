@@ -9,11 +9,12 @@ import SwiftUI
 
 struct ResultView: View {
     @EnvironmentObject var testViewModel: TestViewModel
+    @State private var advice: String = "" // 表示するワンポイントアドバイス
 
     let onReturnToStart: () -> Void // メイン画面へ戻るコールバック
 
     var body: some View {
-        VStack(spacing: 50) {
+        VStack(spacing: 30) {
             Spacer()
 
             // タイトル
@@ -33,6 +34,11 @@ struct ResultView: View {
                     .monospacedDigit()
             }
 
+            // ワンポイントアドバイス
+            adviceCard
+
+            Spacer()
+
             // メインへ戻るボタン
             Button("メイン画面へ戻る") {
                 onReturnToStart()
@@ -44,11 +50,37 @@ struct ResultView: View {
             .background(.blue)
             .cornerRadius(12)
             .padding(.horizontal, 20)
-
-            Spacer()
         }
         .toolbar(.hidden, for: .navigationBar)
+        .onAppear {
+            // 画面表示のたびにランダムで1つ選ぶ
+            advice = TestAdvice.random()
+        }
         .dynamicTypeSize(...DynamicTypeSize.accessibility2)
+    }
+
+    // MARK: - ワンポイントアドバイスカード
+    private var adviceCard: some View {
+        VStack(spacing: 12) {
+            HStack(spacing: 8) {
+                Image(systemName: "lightbulb.fill")
+                    .foregroundColor(.yellow)
+                Text("ワンポイントアドバイス")
+                    .font(.headline)
+                    .foregroundColor(.primary)
+            }
+
+            Text(advice)
+                .font(.body)
+                .foregroundColor(.primary)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .padding(20)
+        .frame(maxWidth: .infinity)
+        .background(Color(.secondarySystemBackground))
+        .cornerRadius(16)
+        .padding(.horizontal, 20)
     }
 }
 
