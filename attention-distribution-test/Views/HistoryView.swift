@@ -162,9 +162,16 @@ private struct StatisticItem: View {
     }
 }
 
-#Preview {
+#Preview("履歴あり") {
     NavigationStack {
         HistoryView()
             .environmentObject(HistoryViewModel(dataService: MockDataService(withMockData: true)))
+    }
+}
+
+#Preview("履歴なし") {
+    NavigationStack {
+        HistoryView()
+            .environmentObject(HistoryViewModel(dataService: MockDataService(withMockData: false)))
     }
 }

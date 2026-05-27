@@ -162,3 +162,19 @@ class TestViewModel: ObservableObject {
         }
     }
 }
+
+#if DEBUG
+// MARK: - Preview Helpers
+extension TestViewModel {
+    // プレビュー用に任意の状態を持つ TestViewModel を生成する
+    static func preview(elapsedTime: TimeInterval = 0, isPersonalBest: Bool = false) -> TestViewModel {
+        let viewModel = TestViewModel(
+            timerService: MockTimerService(),
+            dataService: MockDataService()
+        )
+        viewModel.elapsedTime = elapsedTime
+        viewModel.isPersonalBest = isPersonalBest
+        return viewModel
+    }
+}
+#endif

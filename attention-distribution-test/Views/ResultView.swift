@@ -128,12 +128,12 @@ struct ResultView: View {
     }
 }
 
-#Preview {
-    let testViewModel = TestViewModel(
-        timerService: MockTimerService(),
-        dataService: MockDataService()
-    )
+#Preview("通常") {
+    ResultView(onRestart: {}, onReturnToStart: {})
+        .environmentObject(TestViewModel.preview(elapsedTime: 142))
+}
 
-    return ResultView(onRestart: {}, onReturnToStart: {})
-        .environmentObject(testViewModel)
+#Preview("自己ベスト更新") {
+    ResultView(onRestart: {}, onReturnToStart: {})
+        .environmentObject(TestViewModel.preview(elapsedTime: 98, isPersonalBest: true))
 }
