@@ -23,6 +23,7 @@ struct GridCell: View {
                         Rectangle()
                             .stroke(Color.primary, lineWidth: strokeWidth)
                     )
+                    .animation(.easeInOut(duration: 0.15), value: isSelected)
 
                 // 数字表示（範囲外などでnilのときは空表示）
                 if let number {
@@ -31,6 +32,8 @@ struct GridCell: View {
                         .foregroundColor(isSelected ? .black : .primary)
                         .minimumScaleFactor(0.7) // 小画面で文字が収まらない場合のスケールファクター
                         .lineLimit(1)
+                        .scaleEffect(isSelected ? 1.15 : 1.0)
+                        .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isSelected)
                 }
             }
         }
