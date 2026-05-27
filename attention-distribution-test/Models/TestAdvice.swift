@@ -10,27 +10,27 @@ import Foundation
 // 検査のパフォーマンスを上げるためのワンポイントアドバイス集
 enum TestAdvice {
     static let all: [String] = [
-        "視線を1点に集中せず、全体を見渡す感覚で探しましょう",
-        "数字がすぐ近くにあることも",
-        "間違えても焦らず、深呼吸してから再開しましょう",
-        "練習を重ねると目線の移動が効率化され、タイムが自然と縮みます",
-        "同じ場所を何度も見るより、まだ見ていないエリアを優先して探しましょう",
-        "中央から放射状に視線を広げる探し方も有効です",
-        "肩の力を抜いてリラックスしましょう",
-        "緊張すると視野が狭くなります。検査前に深呼吸して",
-        "スコアが伸びない時こそ、急がず正確さを優先しましょう",
-        "疲れている時は注意力が低下します。休憩を挟んでから挑戦しましょう",
-        "検査前に目を閉じて視覚をリセットすると、集中力が高まります",
-        "視線を素早く動かすより、広い範囲を一度に見る意識が大切です",
-        "毎日少しずつ続けることで、注意配分の力が着実に伸びます",
-        "数字の配置を覚える必要はありません。冷静に1つずつ探しましょう",
-        "ある程度の時間探して見つからない時は縦・横に目線を移して探しましょう",
-        "手やペン先で隠れてしまわないように注意しましょう",
-        "先の数字を見つけておくことで、効率的に探せます"
+        String(localized: "Scan the whole grid rather than fixating on one spot."),
+        String(localized: "The next number may be right next to the last one."),
+        String(localized: "If you make a mistake, take a deep breath before continuing."),
+        String(localized: "With practice, your eye movement becomes more efficient and your time improves."),
+        String(localized: "Prioritize unscanned areas over re-checking the same spots."),
+        String(localized: "Try scanning outward from the center in a radial pattern."),
+        String(localized: "Relax your shoulders and stay calm."),
+        String(localized: "Tension narrows your field of vision. Take a deep breath before starting."),
+        String(localized: "When your score plateaus, prioritize accuracy over speed."),
+        String(localized: "Attention drops when you are tired. Take a break before trying again."),
+        String(localized: "Close your eyes briefly before the test to reset your focus."),
+        String(localized: "Taking in a wide area at once matters more than moving your eyes quickly."),
+        String(localized: "A little practice each day steadily improves your attention skills."),
+        String(localized: "You do not need to memorize the layout. Calmly search one number at a time."),
+        String(localized: "If you cannot find a number after a while, scan vertically and horizontally."),
+        String(localized: "Make sure your hand or stylus does not cover the grid."),
+        String(localized: "Spotting the next number ahead of time makes the search more efficient.")
     ]
 
     // ランダムに1つ取得する
     static func random() -> String {
-        all.randomElement() ?? "落ち着いて。"
+        all.randomElement() ?? String(localized: "Stay calm.")
     }
 }
