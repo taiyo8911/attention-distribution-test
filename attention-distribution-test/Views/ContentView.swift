@@ -29,9 +29,11 @@ struct ContentView: View {
                         currentScreen = .start
                     })
                 case .finished:
-                    ResultView {
+                    ResultView(onRestart: {
+                        currentScreen = .countdown
+                    }, onReturnToStart: {
                         currentScreen = .start
-                    }
+                    })
                 }
             }
             .environmentObject(testViewModel)

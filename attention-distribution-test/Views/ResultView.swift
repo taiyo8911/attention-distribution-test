@@ -11,6 +11,7 @@ struct ResultView: View {
     @EnvironmentObject var testViewModel: TestViewModel
     @State private var advice: String = "" // 表示するワンポイントアドバイス
 
+    let onRestart: () -> Void // もう一度挑戦するコールバック
     let onReturnToStart: () -> Void // メイン画面へ戻るコールバック
 
     var body: some View {
@@ -50,16 +51,30 @@ struct ResultView: View {
 
             Spacer()
 
-            // もう一度挑戦ボタン
-            Button("もう一度挑戦") {
-                onReturnToStart()
+            // アクションボタン
+            VStack(spacing: 12) {
+                // もう一度挑戦ボタン（主アクション）
+                Button("もう一度挑戦") {
+                    onRestart()
+                }
+                .font(.title3)
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 16)
+                .background(.blue)
+                .cornerRadius(12)
+
+                // メイン画面へ戻るボタン（副アクション）
+                Button("メイン画面へ戻る") {
+                    onReturnToStart()
+                }
+                .font(.title3)
+                .foregroundColor(.blue)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 16)
+                .background(Color.blue.opacity(0.1))
+                .cornerRadius(12)
             }
-            .font(.title3)
-            .foregroundColor(.white)
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 16)
-            .background(.blue)
-            .cornerRadius(12)
             .padding(.horizontal, 20)
         }
         .toolbar(.hidden, for: .navigationBar)
@@ -119,6 +134,6 @@ struct ResultView: View {
         dataService: MockDataService()
     )
 
-    return ResultView(onReturnToStart: {})
+    return ResultView(onRestart: {}, onReturnToStart: {})
         .environmentObject(testViewModel)
 }
