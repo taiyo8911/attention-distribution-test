@@ -128,6 +128,7 @@ struct ResultView: View {
     }
 }
 
+#if DEBUG
 #Preview("通常") {
     ResultView(onRestart: {}, onReturnToStart: {})
         .environmentObject(TestViewModel.preview(elapsedTime: 142))
@@ -137,3 +138,4 @@ struct ResultView: View {
     ResultView(onRestart: {}, onReturnToStart: {})
         .environmentObject(TestViewModel.preview(elapsedTime: 98, isPersonalBest: true))
 }
+#endif
